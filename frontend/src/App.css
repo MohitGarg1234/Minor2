@@ -1,0 +1,87 @@
+.Home{
+  background-color: rgb(153, 153, 204);
+  /* background-color: #3F51B5;  */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  height: 25vh;
+}
+.header-text {
+  text-align: center;
+  flex: 1; 
+  color: rgb(2, 5, 107);
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
+.Logo{
+  margin: 1vw;
+  height: 20vh;
+  width: 10vw;
+}
+h1 {
+  font-size: 2em;
+  margin-top: 50px;
+  font-weight: bold;
+}
+h3 {
+  font-size: 1.2em;
+  margin-bottom: 50px;
+}
+.header{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: blue;
+  min-height: 75vh;
+  font-family: sans-serif;
+  /* background-image: url('../images/JiitClgPhoto-transformed.jpeg');  */
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.btn{
+  color: white;
+  font-size: 1.5rem;
+  margin-top: 10vh;
+  width: 10%;
+  background-color: rgb(28, 209, 28);
+  border-top-left-radius: 15px; 
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border: 1px solid rgb(28, 209, 28);
+}
+@media (max-width: 1000px){
+  .btn{
+      width: 15vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .Home {
+    height: auto;
+    padding: 20px; 
+  }
+
+  .Logo {
+    height: 25vh;
+    width: 20vw ;
+    margin-right: 2vw;
+  }
+
+  h1 {
+    font-size: 1.3em; 
+    margin-top: 20px; 
+  }
+
+  h3 {
+    font-size: 1em; 
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    width: 35vw; 
+  }
+  
+}
