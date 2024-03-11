@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   height: 20vh;
+  
 }
 .header-text {
   text-align: center;
@@ -17,6 +18,11 @@
   margin: 1vw;
   height: 16vh;
   width: 8vw;
+}
+.Logo2{
+  margin: 1vw;
+  height: 5vh;
+  width: 3vw;
 }
 h1 {
   font-size: 2em;
