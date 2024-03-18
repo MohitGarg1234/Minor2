@@ -8,19 +8,21 @@ import Verification from './Components/Verification';
 import Details from './Components/Details';
 import HomePage from './Components/HomePage';
 import Navbar from './Components/Navbar';
+import ConnectAlumini from './Components/ConnectAlumini';
 function App() {
   return (
     <div >
       {/* <Header/> */}
-      <Navbar/>
       <Router>
+      <Navbar/>
         <Routes>
-          <Route  path="/" element={<Home/>}/>
+          <Route path="/" element={<Home/>}/>
           <Route path="/signup" element={<Signup/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/verification" element={<Verification/>}/>
           <Route path="/details" element={<Details/>}/>
           <Route path='/homepage' element={<HomePage/>}/>
+          <Route path='/grownnetwork' element={<ConnectAlumini/>}/>
         </Routes>
       </Router>
     </div>
