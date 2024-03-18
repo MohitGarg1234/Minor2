@@ -1,0 +1,49 @@
+/* HomePage.css */
+.centered-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .card-container {
+    border: 1px solid #ccc;
+    width: 500px;
+    height: 300px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .card-title {
+    display: flex;
+    align-items: center;
+  }
+  
+  .person-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .person-name {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  
+  .card-text {
+    margin-bottom: 15px;
+  }
+  
+  .text-body-secondary {
+    color: #6c757d;
+  }
+  
+  .card-img-bottom {
+    width: 100%;
+    height: auto;
+    border-top: 1px solid #ccc;
+  }
+  
