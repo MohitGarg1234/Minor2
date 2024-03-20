@@ -60,7 +60,7 @@ const Navbar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/"
+                    to="/setting"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
                     Settings
@@ -141,7 +141,7 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/"
+                  to="/resume"
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   Resume Improvement
@@ -157,10 +157,10 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/"
+                  to="/notification"
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
-                <i className="fa-regular fa-bell inline-block	relative"><span className="ml-0.5 text-white p-1 bg-[red] rounded-full text-sm">2</span></i>
+                <i className="fa-regular fa-bell inline-block	relative"><span class="bg-red-600 text-xs font-medium text-white-800 text-center p-0.5 leading-none rounded-full px-2 dark:bg-red-600 dark:text-blue-200 absolute -translate-y-1/2 translate-x-1/2 left-auto top-0 right-0">2</span></i>
                 </Link>
               </li>
             </ul>
