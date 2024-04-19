@@ -49,6 +49,23 @@ const UserSchema = new mongoose.Schema({
     },
     Education:{
         type : String,
+    },
+    mobileVisibility: {
+        type: Boolean,
+        default: true
+    },
+    emailVisibility: {
+        type: Boolean,
+        default: true
+    },
+    LinkedInVisibility: {
+        type: Boolean,
+        default: true
+    },
+    isAlumni: {
+        type: Boolean,
+        default: false
     }
+    
 });
 module.exports = mongoose.model('user',UserSchema);

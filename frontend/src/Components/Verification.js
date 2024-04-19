@@ -20,8 +20,13 @@ const Verification = () => {
       const data = await response.json();
       setMessage(data.message);
       if (data.success) {
-        console.log("Verified")
-        navigate('/details');
+        const userDetailsResponse = await fetch(`http://127.0.0.1:5000/api/details?enrollmentNumber=${enrollmentNumber}`);
+        const userDetailsData = await userDetailsResponse.json();
+        if (userDetailsData.success) {
+          navigate('/details', { state: { userDetails: userDetailsData.user } });
+        } else {
+          console.error('Error fetching user details:', userDetailsData.message);
+        }
       }
     } catch (error) {
       console.error('Error:', error);
@@ -38,7 +43,7 @@ const Verification = () => {
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h6 className="font-medium leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              OTP sent to email "john@doe.com".
+              OTP sent to email .
             </h6>
             <form className="space-y-4 md:space-y-6" action="/">
               <div>
