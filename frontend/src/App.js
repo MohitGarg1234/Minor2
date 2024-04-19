@@ -14,6 +14,8 @@ import JobOpeningPage from './Components/JobOpeningPage';
 import Resume from './Components/Resume';
 import Setting from './Components/Setting';
 import Notification from './Components/Notification';
+import Askforreferal from './Components/Askforreferal';
+import Message from './Components/Message';
 function App() {
   return (
     <div >
@@ -30,9 +32,11 @@ function App() {
           <Route path='/grownnetwork' element={<ConnectAlumini/>}/>
           <Route path='/jobopening' element={<JobOpening/>}/>
           <Route path='/jobopeningpage' element={<JobOpeningPage/>}/>
+          <Route path='/askforreferal' element={<Askforreferal/>}/>
           <Route path='/resume' element={<Resume/>}/>
           <Route path='/setting' element={<Setting/>}/>
           <Route path='/notification' element={<Notification/>}/>
+          <Route path='/message' element={<Message/>}/>
         </Routes>
       </Router>
     </div>

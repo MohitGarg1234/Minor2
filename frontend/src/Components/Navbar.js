@@ -116,7 +116,7 @@ const Navbar = () => {
             <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <Link
-                  to="/"
+                  to="/homepage"
                   className="ml-2 block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
                   aria-current="page"
                 >
@@ -149,7 +149,7 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  to="/"
+                  to="/askforreferal"
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   Ask For Referral
@@ -159,7 +159,7 @@ const Navbar = () => {
                 <Link
                   to="/notification"
                   className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-                <i className="fa-regular fa-bell inline-block	relative"><span class="bg-red-600 text-xs font-medium text-white-800 text-center p-0.5 leading-none rounded-full px-2 dark:bg-red-600 dark:text-blue-200 absolute -translate-y-1/2 translate-x-1/2 left-auto top-0 right-0">2</span></i>
+                <i className="fa-regular fa-bell inline-block	relative"><span className="bg-red-600 text-xs font-medium text-white-800 text-center p-0.5 leading-none rounded-full px-2 dark:bg-red-600 dark:text-blue-200 absolute -translate-y-1/2 translate-x-1/2 left-auto top-0 right-0">2</span></i>
                 </Link>
               </li>
             </ul>

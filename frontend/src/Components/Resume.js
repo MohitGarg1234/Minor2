@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../images/Logo-jiit.png";
+import { Link } from 'react-router-dom';
 
 const Resume = () => {
+  const [buttonText, setButtonText] = useState('Request');
+
+  const handleClick = () => {
+    if (buttonText === 'Request') {
+      setButtonText('Pending...');
+    } else {
+      setButtonText('Request');
+    }
+  };
+
   return (
     <>
       <div className="w-3/4 mx-auto mb-4">
@@ -124,6 +135,9 @@ const Resume = () => {
                   Past Experience: hai hi nhu
                 </p>
               </div>
+              <Link to="/resume">
+              <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3" onClick={handleClick}>{buttonText}</button>
+              </Link>
             </a>
           </div>
           <div className="w-full md:w-5/12 lg:w-11/12">
@@ -156,6 +170,9 @@ const Resume = () => {
                   Past Experience: hai hi nhu
                 </p>
               </div>
+              <Link to="/resume">
+              <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3" onClick={handleClick}>{buttonText}</button>
+              </Link>
             </a>
           </div>
           <div className="w-full md:w-5/12 lg:w-11/12">
@@ -188,6 +205,9 @@ const Resume = () => {
                   Past Experience: hai hi nhu
                 </p>
               </div>
+              <Link to="/resume">
+              <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3" onClick={handleClick}>{buttonText}</button>
+              </Link>
             </a>
           </div>
         </div>
