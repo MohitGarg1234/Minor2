@@ -33,7 +33,7 @@ h3 {
   font-size: 1.2em;
   margin-bottom: 50px;
 }
-.header{
+/* .header{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,9 +43,7 @@ h3 {
   background-size: cover;
   background-position: center;
   color: white;
-  /* text-align: center; */
-  /* color:antiquewhite */
-}
+} */
 
 .btn{
   color: white;
