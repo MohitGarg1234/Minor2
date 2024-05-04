@@ -1,14 +1,100 @@
-import React from "react";
-import Logo from "../images/Logo-jiit.png";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 const JobOpening = () => {
+  const [jobOpenings, setJobOpenings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [dataFetched, setDataFetched] = useState(false);
+  const token = localStorage.getItem("token");
+  function parseJwt(token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    
+    return JSON.parse(jsonPayload);
+  }
+  // Extract user ID from decoded token
+  const [userDetails,setUserDetails] = useState([]);
+  const decodedToken = parseJwt(token);
+  const currentUserId = decodedToken.userId;
+  const fetchUserDetails = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/${currentUserId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user details");
+      }
+      const data = await response.json();
+      setUserDetails(data);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+      return null;
+    }
+  };
+  useEffect(() => {
+    // Function to fetch data from API
+    fetchUserDetails();
+    // eslint-disable-next-line
+  }, []);
+
+  const fetchJobOpenings = useCallback(async () => {
+    const fetchJobOpeningsWithUserDetails = async (jobs) => {
+      const fetchUserDetails = async (userId) => {
+        try {
+          const response = await fetch(`http://localhost:5000/api/${userId}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch user details");
+          }
+          return await response.json();
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+          return null;
+        }
+      };
+
+      const jobsWithUserDetails = await Promise.all(
+        jobs.map(async (job) => {
+          const userDetails = await fetchUserDetails(job.postedBy);
+          return { ...job, userDetails };
+        })
+      );
+      return jobsWithUserDetails;
+    };
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/jobopenings");
+      if (!response.ok) {
+        throw new Error("Failed to fetch job openings");
+      }
+      const data = await response.json();
+      const jobsWithUserDetails = await fetchJobOpeningsWithUserDetails(data);
+      setJobOpenings(jobsWithUserDetails);
+      setLoading(false);
+      setDataFetched(true); // Set dataFetched to true after successful fetch
+    } catch (error) {
+      console.error("Error fetching job openings:", error);
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!dataFetched) {
+      fetchJobOpenings();
+    }
+  }, [dataFetched, fetchJobOpenings]);
+
   return (
     <div className="container mx-auto">
       <div className="flex-col">
-        <Link
-          to="/jobopeningpage"
-          className="flex items-center justify-center font-medium text-primary-600 hover:underline dark:text-primary-500"
+        {userDetails.isAlumni &&
+        <Link to="/jobopeningpage"
+        className="flex items-center justify-center font-medium text-primary-600 hover:underline dark:text-primary-500"
         >
           <button
             id="postJobBtn"
@@ -28,7 +114,7 @@ const JobOpening = () => {
                 strokeWidth="2"
                 stroke="white"
                 fill="none"
-              />
+                />
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -39,203 +125,49 @@ const JobOpening = () => {
             <span className="ml-10">Post a Job</span>
           </button>
         </Link>
-
-        <div className="flex justify-between">
-          <form className="max-w-md mx-auto mb-4 md:mb-0 md:mr-4">
-            <label
-              htmlFor="default-search"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-            >
-              Search
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none">
-                <svg
-                  className="w-6 h-6 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 19l-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </div>
-              <input
-                type="search"
-                id="default-search"
-                className="mb-2 block w-full lg:w-72 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search Alumni"
-                required
-              />
-            </div>
-          </form>
-
-          <form className="max-w-md mx-auto mb-4 md:mb-0">
-            <label
-              htmlFor="default-search"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-            >
-              Search
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-6 h-6 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 4a2 2 0 1 0 0 4h8a2 2 0 1 0 0-4H6ZM4 10a2 2 0 1 0 0 4h12a2 2 0 1 0 0-4H4Z"
-                  />
-                </svg>
-              </div>
-              <input
-                type="search"
-                id="default-search"
-                className="mb-2 block w-full lg:w-72 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Apply Filter"
-                required
-              />
-            </div>
-          </form>
-        </div>
-
+          }
         <div className="mx-auto max-w-screen-lg md:max-w-screen-md">
-        <div className="grid md:grid-cols-1 lg:grid-cols-1 justify-center">
-          <div className="w-full md:w-5/12 lg:w-11/12">
-              <a
-                href="/"
-                className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-              >
-                <img
-                  className="object-cover w-1/3 rounded-l-lg md:w-48"
-                  src={Logo}
-                  alt=""
-                />
-                <div className="p-4 w-2/3">
-                  <h6 className="font-bold mb-2 text-gray-900 dark:text-white">
-                    Chiranshu Agrawal
-                  </h6>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Graduation Year: 2025
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Profile: Software Developer II
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Company: Apni Company
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Experience: 5 Years
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Past Experience: hai hi nhu
-                  </p>
-                </div>
-                <div className="flex flex-col justify-center items-center space-y-4">
-                  <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3">
-                    Request Referral
-                  </button>
-                  <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3">
-                    View Job
-                  </button>
-                </div>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            jobOpenings.map((job) => <JobListing key={job._id} job={job} />)
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-              </a>
-            </div>
-            <div className="w-full md:w-5/12 lg:w-11/12">
-              <a
-                href="/"
-                className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-              >
-                <img
-                  className="object-cover w-1/3 rounded-l-lg md:w-48"
-                  src={Logo}
-                  alt=""
-                />
-                <div className="p-4 w-2/3">
-                  <h6 className="font-bold mb-2 text-gray-900 dark:text-white">
-                    Chiranshu Agrawal
-                  </h6>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Graduation Year: 2025
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Profile: Software Developer II
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Company: Apni Company
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Experience: 5 Years
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Past Experience: hai hi nhu
-                  </p>
-                </div>
-                <div className="flex flex-col justify-center items-center space-y-4">
-                  <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3">
-                    Request Referral
-                  </button>
-                  <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3">
-                    View Job
-                  </button>
-                </div>
-
-              </a>
-            </div>
-            <div className="w-full md:w-5/12 lg:w-11/12">
-              <a
-                href="/"
-                className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-              >
-                <img
-                  className="object-cover w-1/3 rounded-l-lg md:w-48"
-                  src={Logo}
-                  alt=""
-                />
-                <div className="p-4 w-2/3">
-                  <h6 className="font-bold mb-2 text-gray-900 dark:text-white">
-                    Chiranshu Agrawal
-                  </h6>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Graduation Year: 2025
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Profile: Software Developer II
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Company: Apni Company
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Experience: 5 Years
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Past Experience: hai hi nhu
-                  </p>
-                </div>
-                <div className="flex flex-col justify-center items-center space-y-4">
-                  <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3">
-                    Request Referral
-                  </button>
-                  <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3">
-                    View Job
-                  </button>
-                </div>
-              </a>
-            </div>
+const JobListing = ({ job }) => {
+  return (
+    <div className="grid md:grid-cols-1 lg:grid-cols-1 justify-center">
+      <div className="w-full md:w-5/12 lg:w-10/12">
+        <div className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+          {/* Job details */}
+          <div className="p-4 w-2/3">
+            <h6 className="font-bold mb-2 text-gray-900 dark:text-white">
+              Company - {job.CompanyName}
+            </h6>
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              Role - {job.Role}
+            </p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              Experience - {job.Experience}
+            </p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              Skills Required - {job.SkillsRequired}
+            </p>
+            {job.userDetails && (
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Posted By - {job.userDetails.name}
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col justify-center items-center space-y-4">
+            <a href={job.ApplyLinks} rel="noreferrer" target="_blank" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3"
+            >
+              View Job
+            </a>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import './App.css';
 // import Header from './Components/Header';
 import Home from './Components/Home';
 import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import Header from './Components/Header'
 import Signup from './Components/Signup';
 import Login from './Components/Login';
 import Verification from './Components/Verification';
@@ -16,12 +17,14 @@ import Setting from './Components/Setting';
 import Notification from './Components/Notification';
 import Askforreferal from './Components/Askforreferal';
 import Message from './Components/Message';
+import ChatArea from './Components/ChatArea';
 function App() {
+  const token = localStorage.getItem('token');
   return (
     <div >
-      {/* <Header/> */}
+      {!token && <Header/>}
       <Router>
-      <Navbar/>
+      {token && <Navbar/>}
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/signup" element={<Signup/>} />
@@ -37,6 +40,7 @@ function App() {
           <Route path='/setting' element={<Setting/>}/>
           <Route path='/notification' element={<Notification/>}/>
           <Route path='/message' element={<Message/>}/>
+          <Route path='/chatarea' element={<ChatArea/>} />
         </Routes>
       </Router>
     </div>
