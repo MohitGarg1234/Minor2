@@ -7,6 +7,9 @@ const authEnrollRoute = require('./routes/authEnroll');
 const jobPostRoute = require('./routes/jobPost');
 const connectionRoute = require('./routes/connectionRoute');
 const messageRoute = require('./routes/messageRoute.js')
+const articlesRoute = require('./routes/articlesRoute.js')
+const experienceRoute = require('./routes/experienceRoute.js')
+const skillRoute = require('./routes/skillRoute.js')
 const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
@@ -24,6 +27,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/JiitAlumniPortal', {
 });
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(express.static(__dirname+"/"))
 
 // Init gfs
 let gfs;
@@ -50,8 +55,9 @@ app.use('/api',authEnrollRoute(upload, gfs, mongoose))
 app.use('/api',jobPostRoute)
 app.use('/api',connectionRoute)
 app.use('/api',messageRoute)
-
-
+app.use('/api',articlesRoute)
+app.use('/api',experienceRoute)
+app.use('/api',skillRoute)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

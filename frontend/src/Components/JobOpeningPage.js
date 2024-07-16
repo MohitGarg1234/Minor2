@@ -1,19 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../context/userContext";
 
 const JobOpeningPage = () => {
-  const token = (localStorage.getItem("token"));
-  function parseJwt(token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-}
-// Extract user ID from decoded token
-const decodedToken = parseJwt(token);
-const userId = decodedToken.userId;
+  const {currentUserId} = useContext(UserContext);
   const [formData, setFormData] = useState({
     CompanyName: "",
     JobDescription: "",
@@ -24,7 +13,7 @@ const userId = decodedToken.userId;
     Experience: "",
     SkillsRequired: "",
     ApplyLinks: "",
-    postedBy: userId,
+    postedBy: currentUserId,
   });
 
   const [error, setError] = useState(""); 
@@ -42,9 +31,9 @@ const userId = decodedToken.userId;
     ) {
       setError("Invalid link format. It must start with http:// or https://");
       setTimeout(() => {
-        setError(""); // Clear the error message after 2 seconds
+        setError("");
       }, 2000);
-      return; // Don't proceed further if there's an error
+      return;
     }
     try {
       const response = await fetch('http://localhost:5000/api/jobpost', {
@@ -65,7 +54,7 @@ const userId = decodedToken.userId;
   };
   return (
     <>
-      <div className="w-1/3 mx-auto mb-4">
+      <div className="w-1/3 mx-auto">
         <div className="text-center border border-gray-300 p-2 rounded-full">
           <h2
             className="text-lg font-semibold text-gray-800 rounded-full"
@@ -76,7 +65,7 @@ const userId = decodedToken.userId;
         </div>
       </div>
 
-      <div className="bg-gray-100 p-6 mx-6 rounded-lg shadow-md mb-5">
+      <div className="bg-gray-100 p-6 mx-6 rounded-lg shadow-md">
         <form onSubmit={handleSubmit}>
           <label
             htmlFor="CompanyName"
@@ -90,6 +79,7 @@ const userId = decodedToken.userId;
             name="CompanyName"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             value={formData.CompanyName} onChange={handleChange}
+            required
           />
 
           <label

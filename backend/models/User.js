@@ -1,4 +1,25 @@
 const mongoose = require("mongoose");
+const ExperienceSchema = new mongoose.Schema({
+  companyName: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    required: true,
+  },
+  years: {
+    type: String,
+    required: true,
+  }
+});
+const SkillSchema = new mongoose.Schema({
+  skillName: {
+    type: String,
+    required: true,
+  },
+});
+
 const UserSchema = new mongoose.Schema({
   enrollmentNumber: {
     type: Number,
@@ -36,18 +57,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
     isPrivateLinkedinId: Boolean,
   },
-  CurrentCompany: {
-    type: String,
-  },
-  Role: {
-    type: String,
-  },
-  Experience: {
-    type: String,
-  },
+  Experience: [ExperienceSchema],
   Education: {
     type: String,
   },
+  Skill: [SkillSchema],
   mobileVisibility: {
     type: Boolean,
     default: true,
@@ -70,6 +84,8 @@ const UserSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  // image: String,
+  image :{
+    type : String,  
+  }
 });
 module.exports = mongoose.model("User", UserSchema);

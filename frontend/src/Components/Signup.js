@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 const Signup = () => {
+  localStorage.removeItem('token');
   const [enrollmentNumber, setEnrollmentNumber] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Signup = () => {
       if(data.message === "Enroll number is valid"){
         navigate('/verification', { state: { enrollmentNumber: enrollmentNumber } })
       }
+
     } catch (error) {
       console.error('Error:', error);
     }
@@ -29,17 +31,6 @@ const Signup = () => {
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center mt-20 px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a
-          href="/"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-        >
-          <img
-            className="w-8 h-8 mr-2"
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-            alt="logo"
-          />
-          SignUp
-        </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -70,7 +61,7 @@ const Signup = () => {
                 Fetch Details
               </button>
 
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">{message}</p>
+              <p className="text-sm font-dark text-red-500 text-gray-500 dark:text-gray-400 ">{message}</p>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link

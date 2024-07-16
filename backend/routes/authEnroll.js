@@ -1,9 +1,39 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const validator = require('validator');
+
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+// const multer = require("multer");
+// Multer configuration for storing images
+// const { v4: uuidv4 } = require("uuid");
+// const path = require("path");
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, "uploads/");
+//     },                    
+//     filename: function (req, file, cb) {
+//         const ext = path.extname(file.originalname);
+//         const sanitizedOriginalname = file.originalname.replace(/[^a-zA-Z0-9\-_.]/g, ''); 
+//         if (ext) {
+//           cb(null, file.fieldname + "-" + uuidv4() + Number(Date.now()).toString() + "-" + sanitizedOriginalname.replace(ext, '') + ext);
+//         } 
+//         else if (req.body.post_type == 3) {
+//           cb(null, file.fieldname + "-" + uuidv4() + Number(Date.now()).toString() + "-" + sanitizedOriginalname + ".mp4");
+//         } 
+//         else {
+//           cb(null, file.fieldname + "-" + uuidv4() + Number(Date.now()) + "-" + sanitizedOriginalname.replace(ext, '') + ext);
+//         }
+//       },
+//       onError: function (err, next) {
+//         console.log('error', err);
+//         next(err);
+//       }
+//     });
+
+// const upload = multer({ storage });
 
 const authEnrollRoutes = (upload, gfs, mongoose) => {
 const JWT_SECRET_KEY = "Jiit$Alumni#Portal";
@@ -106,16 +136,49 @@ const verifyToken = (req, res, next) => {
     }
   });
 // Update user details including image
-router.put('/updateUserDetails',  async (req, res) => {
+// router.put('/updateUserDetails',upload.single('image'),async (req, res) => {
+//   const { enrollmentNumber, ...userData } = req.body;
+//   if (req.file) {
+//     // If file uploaded, add its path to userData
+//     userData.image = req.file.path;
+//   }
+//   else{
+//     console.log("No Image");
+//   }
+//   try {
+//     // const hashedPassword = await bcrypt.hash(userData.password, 10);
+//     // userData.password = hashedPassword;
+//     if (userData.password) {
+//       const hashedPassword = await bcrypt.hash(userData.password, 10);
+//       userData.password = hashedPassword; // Replace the plain password with the hashed one
+//     }
+//     else{
+//       console.log("heelo");
+//     }
+//     // if (req.file) {
+//     //   userData.image = req.file.path; // Assuming 'image' is the field name in the User model
+//     // }
+//     // else{
+//     //   console.log("No image");
+//     // }
+//     await mongoose.model('User').findOneAndUpdate({ enrollmentNumber }, userData);
+//     res.json({ success: true, message: 'User details updated successfully' });
+//   } catch (error) {
+//     console.error('Error updating user details:', error);
+//     res.status(500).json({ success: false, message: 'Internal server error' });
+//   }
+// });
+
+router.put('/updateUserDetails',async (req, res) => {
   const { enrollmentNumber, ...userData } = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-    userData.password = hashedPassword;
-
-    // if (req.file) {
-    //   userData.image = req.file.filename; // Assuming 'image' is the field name in the User model
-    // }
-
+    if (userData.password) {
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      userData.password = hashedPassword;
+    }
+    else{
+      console.log("hello");
+    }
     await mongoose.model('User').findOneAndUpdate({ enrollmentNumber }, userData);
     res.json({ success: true, message: 'User details updated successfully' });
   } catch (error) {
@@ -123,28 +186,21 @@ router.put('/updateUserDetails',  async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
-  // router.put(`/updateUserDetails`, async (req, res) => {
-  //   const userData = req.body;
-  //   try {
-  //     const hashedPassword = await bcrypt.hash(userData.password, 10);
-  //     userData.password = hashedPassword;
-  //     await User.findOneAndUpdate(
-  //       { enrollmentNumber: userData.enrollmentNumber },
-  //       userData
-  //     );
-  //     res.json({ success: true, message: "User details updated successfully" });
-  //   } catch (error) {
-  //     console.error("Error updating user details:", error);
-  //     res
-  //       .status(500)
-  //       .json({ success: false, message: "Internal server error" });
-  //   }
-  // });
 
   // Endpoint for login
   router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     try {
+      if (!validator.isEmail(email)) {
+        return res
+            .status(400)
+            .json({ success: false, message: "Email Must Contains @ and . " });
+    }
+    if (!password) {
+      return res
+          .status(400)
+          .json({ success: false, message: "Password is required" });
+  }
       const user = await User.findOne({ email });
       if (!user) {
         return res
@@ -196,30 +252,15 @@ router.get('/connected-people', verifyToken, async (req, res) => {
   }
 });
 
-  // router.get('/data/random', async (req, res) => {
-  //   try {
-  //     const token = req.headers.authorization.split(' ')[1];
-  //     const decodedToken = jwt.verify(token, JWT_SECRET_KEY);
-  //     const userId = decodedToken.userId;
-  //       const data = await User.find({ _id: { $ne: userId } });
-  //     res.json(data);
-  //   } catch (err) {
-  //     console.error(err);
-  //     res.status(500).json({ message: 'Server error' });
-  //   }
-  // });
-
   router.get("/data/random", async (req, res) => {
     try {
       const token = req.headers.authorization.split(" ")[1];
       const decodedToken = jwt.verify(token, JWT_SECRET_KEY);
       const userId = decodedToken.userId;
 
-      // Fetch the user's connections
       const currentUser = await User.findById(userId);
       const connectedUserIds = currentUser.connections;
 
-      // Now fetch data for users who are not connected to the current user
       const data = await User.find({
         _id: { $ne: userId, $nin: connectedUserIds },
       });

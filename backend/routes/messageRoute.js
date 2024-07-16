@@ -21,7 +21,7 @@ router.post('/send-email', upload.single('resume'), async (req, res) => {
   try {
     let { message,subject, currentUserEmail, targetUserEmail } = req.body;
     const resume = req.file;
-    message+=` This is my email id ${currentUserEmail}`;
+    message+=`\nThis is my email id ${currentUserEmail}`;
     transporter.set('user', currentUserEmail);
 
     // Send email from current user to target user

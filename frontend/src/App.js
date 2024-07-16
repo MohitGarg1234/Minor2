@@ -18,10 +18,11 @@ import Notification from './Components/Notification';
 import Askforreferal from './Components/Askforreferal';
 import Message from './Components/Message';
 import ChatArea from './Components/ChatArea';
+import Dashboard from './Components/Dashboard';
 function App() {
   const token = localStorage.getItem('token');
   return (
-    <div >
+    <div>
       {!token && <Header/>}
       <Router>
       {token && <Navbar/>}
@@ -41,6 +42,7 @@ function App() {
           <Route path='/notification' element={<Notification/>}/>
           <Route path='/message' element={<Message/>}/>
           <Route path='/chatarea' element={<ChatArea/>} />
+          <Route path='/dashboard' element={<Dashboard/>}/>
         </Routes>
       </Router>
     </div>

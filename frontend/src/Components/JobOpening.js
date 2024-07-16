@@ -90,15 +90,15 @@ const JobOpening = () => {
   }, [dataFetched, fetchJobOpenings]);
 
   return (
-    <div className="container mx-auto">
-      <div className="flex-col">
+    <div className="container mx-auto"  style={{backgroundColor:"#f5efe7",minWidth:"100%"}}>
+      <div className="flex-col p-2 lg:ml-10 ">
         {userDetails.isAlumni &&
         <Link to="/jobopeningpage"
         className="flex items-center justify-center font-medium text-primary-600 hover:underline dark:text-primary-500"
         >
           <button
             id="postJobBtn"
-            className="relative bg-blue-500 text-white font-semibold py-2 px-8 rounded-full flex items-center space-x-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600 mb-4"
+            className="mt-2 relative bg-blue-500 text-white font-semibold py-2 px-8 rounded-full flex items-center space-x-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600 mb-4"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -126,7 +126,7 @@ const JobOpening = () => {
           </button>
         </Link>
           }
-        <div className="mx-auto max-w-screen-lg md:max-w-screen-md">
+        <div className="mx-auto lg:grid lg:grid-cols-3 md:grid grid-cols-2">
           {loading ? (
             <p>Loading...</p>
           ) : (
@@ -140,16 +140,17 @@ const JobOpening = () => {
 
 const JobListing = ({ job }) => {
   return (
-    <div className="grid md:grid-cols-1 lg:grid-cols-1 justify-center">
-      <div className="w-full md:w-5/12 lg:w-10/12">
+      <div className="w-full md:w-10/12 md:ml-5 lg:w-10/12 mt-5">
         <div className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-          {/* Job details */}
           <div className="p-4 w-2/3">
             <h6 className="font-bold mb-2 text-gray-900 dark:text-white">
               Company - {job.CompanyName}
             </h6>
             <p className="text-sm text-gray-700 dark:text-gray-300">
               Role - {job.Role}
+            </p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              Type - {job.JobType}
             </p>
             <p className="text-sm text-gray-700 dark:text-gray-300">
               Experience - {job.Experience}
@@ -163,7 +164,7 @@ const JobListing = ({ job }) => {
               </p>
             )}
           </div>
-          <div className="flex flex-col justify-center items-center space-y-4">
+          <div className="flex flex-col justify-center items-center space-y-4 mr-2">
             <a href={job.ApplyLinks} rel="noreferrer" target="_blank" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3"
             >
               View Job
@@ -171,7 +172,6 @@ const JobListing = ({ job }) => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

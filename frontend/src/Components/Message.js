@@ -34,7 +34,7 @@ const Message = () => {
   };
   return (
     <>
-      <div className="container w-11/12 mx-auto">
+      <div className="container w-11/12 mx-auto h-screen">
         <form>
           <label htmlFor="subject" className="">
             Subject

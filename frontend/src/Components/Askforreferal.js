@@ -1,49 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Logo from "../images/Logo-jiit.png";
+import React, { useState, useEffect, useContext} from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from '../context/userContext';
 
 const Askforreferal = () => {
-  const [connectedPeople, setConnectedPeople] = useState([]);
-  const [userDetails, setUserDetails] = useState([]);
-  const token = localStorage.getItem("token");
-
-  function parseJwt(token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-
-    return JSON.parse(jsonPayload);
-  }
-  // Extract user ID from decoded token
-  const decodedToken = parseJwt(token);
-  const currentUserId = decodedToken.userId;
-  const fetchUserDetails = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/${currentUserId}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch user details");
-      }
-      const data = await response.json();
-      setUserDetails(data);
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-      return null;
-    }
-  };
-  useEffect(() => {
-    fetchUserDetails(currentUserId);
-    // eslint-disable-next-line
-  }, [currentUserId]);
-  let currentUserEmail = userDetails.email;
+  const [connectedPeople, setConnectedPeople] = useState([]);  
+  const { user } = useContext(UserContext);
+  const token = localStorage.getItem('token');
   useEffect(() => {
     const fetchConnectedPeople = async () => {
       try {
@@ -73,15 +35,12 @@ const Askforreferal = () => {
   };
   const filteredData = connectedPeople.filter(
     (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.CurrentCompany.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.Role.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())  );
 
   return (
-    <>
-      <div className="flex justify-center mt-8 mb-5">
-        <form className="max-w-md mx-auto mb-4 md:mb-0 md:mr-4">
+    <section className="h-full lg:h-screen md:h-full"  style={{backgroundColor:"#f5efe7",minWidth:"100%"}}>
+      <div className="flex justify-center">
+        <form className="max-w-md mx-auto">
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -89,9 +48,9 @@ const Askforreferal = () => {
             Search
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none">
+            <div className="ml-2  absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg
-                className="w-6 h-6 text-gray-500 dark:text-gray-400"
+                className="w-4 h-4 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -102,42 +61,33 @@ const Askforreferal = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M19 19l-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                 />
               </svg>
             </div>
             <input
-              type="search"
-              id="default-search"
-              className="mb-2 block w-full lg:w-72 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search Alumni"
-              required
               value={searchQuery}
               onChange={handleSearchChange}
+              type="search"
+              id="default-search"
+              className="m-2 block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Search Alumni"
+              required
             />
           </div>
         </form>
-
-        <form className="max-w-md mx-auto">
-          <label
-            htmlFor="default-search"
-            className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-          >
-            Search
-          </label>
-        </form>
       </div>
-      <div className="mx-auto max-w-screen-lg md:max-w-screen-md">
-        <div className="grid md:grid-cols-1 lg:grid-cols-1 justify-center">
-          <div className="w-full md:w-5/6 lg:w-11/12">
+      {/* <div className="mx-auto max-w-screen-lg md:max-w-screen-md"> */}
+        <div className="flex justify-center">
+          <div className=" lg:grid grid-cols-2">
             {filteredData.map((person) => (
               <div
                 key={person._id}
-                className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                className="m-5 lg:flex md:flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
               >
-                <img
-                  className="object-cover w-1/3 rounded-l-lg sm:w-1/6 md:w-1/5 lg:w-1/4 xl:w-1/4"
-                  src={Logo}
+                <img style={{height:"180px"}}
+                  className="object-cover w-full rounded-l-lg md:w-1/5 lg:w-1/4 xl:w-1/4"
+                  src={person.image}
                   alt=""
                 />
                 <div className="p-4 w-2/3 md:w-1/2 lg:w-2/3 xl:w-3/4">
@@ -148,18 +98,15 @@ const Askforreferal = () => {
                     Graduation Year: {person.YearOfGraduation}
                   </p>
                   <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Profile: {person.Role}
+                    Current Company: {person.Experience[0] && person.Experience[0].companyName}
                   </p>
                   <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Company: {person.CurrentCompany}
-                  </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Experience: {person.Experience}
+                    Role: {person.Experience[0] && person.Experience[0].role}
                   </p>
                 </div>
-
-                <Link
-                  to={`/message?field1=${currentUserEmail}&field2=${person.email}`}
+                
+                <Link className="flex flex-col justify-center items-center space-y-4 p-4"
+                  to={`/message?field1=${user.email}&field2=${person.email}`}
                 >
                   <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3">
                     Message
@@ -169,8 +116,8 @@ const Askforreferal = () => {
             ))}
           </div>
         </div>
-      </div>
-    </>
+      {/* </div> */}
+    </section>
   );
 };
 

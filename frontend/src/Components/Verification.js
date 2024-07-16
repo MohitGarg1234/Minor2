@@ -7,7 +7,6 @@ const Verification = () => {
   const navigate = useNavigate();
   const { enrollmentNumber } = location.state;
   const handleVerifyOTP = async (e) => {
-    // console.log("Verify",enrollmentNumber);
     e.preventDefault();
     try {
       const response = await fetch('http://127.0.0.1:5000/api/verifyOTP', {
@@ -43,7 +42,7 @@ const Verification = () => {
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h6 className="font-medium leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              OTP sent to email .
+              OTP sent to your email
             </h6>
             <form className="space-y-4 md:space-y-6" action="/">
               <div>
@@ -73,7 +72,7 @@ const Verification = () => {
                   Verify
                 </button>
               </Link>
-              {message && <p className="text-sm text-green-500">{message}</p>}
+              {message && <p className="text-sm text-red-500">{message}</p>}
             </form>
           </div>
         </div>
