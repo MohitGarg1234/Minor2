@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
-const mongoURI = "mongodb://127.0.0.1:27017/JiitAlumniPortal"
+require('dotenv').config();
+const mongoURI = process.env.MONGO_URI
 mongoose.set('strictQuery', true);
 const connectToMongo = () => {
-    mongoose
-      .connect(mongoURI)
-      .then(() => console.log("connection success"))
-      .catch((err) => console.log(err));
-  };
+  mongoose
+  .connect(mongoURI)
+  .then(() => console.log("connection success"))
+  .catch((err) => console.log(err));
+};
 module.exports = connectToMongo;

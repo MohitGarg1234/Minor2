@@ -30,36 +30,6 @@ router.post("/users/connect", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
-
-// Route to get details of connected people using token
-// router.get('/connected-people', async (req, res) => {
-//   try {
-//     const token = req.query.token;
-//     console.log(token);
-//     if (!token) return res.status(400).json({ message: 'Token is required' });
-//     console.log(user);
-//     const user = await User.findOne({ token }).populate('connections'); 
-//     if (!user) return res.status(404).json({ message: 'User not found' });
-//     res.json(user.connections);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: 'Server Error' });
-//   }
-// });
-
-
-// // Route to get details of connected people
-// router.get('/connected-people/:userId', async (req, res) => {
-//   try {
-//     const userId = req.params.userId;
-//     const user = await User.findById(userId).populate('connections');
-//     res.json(user.connections);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: 'Server Error' });
-//   }
-// });
-
 router.get("/notification", async (req, res) => {
   try {
     console.log("Received request:", req.url); 

@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const router = express.Router();
+require('dotenv').config();
 
 // Multer middleware for handling file uploads
 const upload = multer();
@@ -11,8 +12,8 @@ const upload = multer();
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: "mgarg1557@gmail.com",
-    pass: "mmhv esrk lnfp khvc",
+    user: process.env.EMAIL_NAME,
+    pass: process.env.EMAIL_PASS,
   }
 });
 
@@ -31,7 +32,6 @@ router.post('/send-email', upload.single('resume'), async (req, res) => {
       text: message,
       attachments: [{ filename: resume.originalname, content: resume.buffer }]
     });
-
     res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
