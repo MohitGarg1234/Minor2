@@ -30,7 +30,6 @@ const verifyToken = (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-
   jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -155,9 +154,7 @@ router.put('/updateUserDetails',async (req, res) => {
       // Generate token
       const token = jwt.sign({ userId: user.id }, JWT_SECRET_KEY);
       // console.log(token);
-      res
-        .status(200)
-        .json({ success: true, message: "Login successful!", token });
+      res.status(200).json({ success: true, message: "Login successful!", token });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server error" });

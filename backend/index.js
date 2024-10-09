@@ -10,6 +10,7 @@ const messageRoute = require('./routes/messageRoute.js')
 const articlesRoute = require('./routes/articlesRoute.js')
 const experienceRoute = require('./routes/experienceRoute.js')
 const skillRoute = require('./routes/skillRoute.js')
+const authAdminRoutes = require('./routes/AdminAuth.js')
 const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
@@ -58,6 +59,7 @@ app.use('/api',messageRoute)
 app.use('/api',articlesRoute)
 app.use('/api',experienceRoute)
 app.use('/api',skillRoute)
+app.use('/api',authAdminRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

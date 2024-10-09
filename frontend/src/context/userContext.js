@@ -1,7 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-
 export const UserContext = createContext();
-
 const parseJwt = (token) => {
   try {
     if (!token) return null;

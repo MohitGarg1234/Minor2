@@ -9,7 +9,11 @@ import Logo5 from "../images/Jiit_audi5.jpg";
 import { Link } from "react-router-dom";
 
 const Home = () => {
-  localStorage.removeItem("token");
+  // localStorage.removeItem("token");
+  var token = localStorage.getItem('token');
+  if(token){
+    window.location.href = "/homepage";
+  }
   return (
     <>
       <div
@@ -18,7 +22,7 @@ const Home = () => {
         data-carousel="slide"
       >
         <div className="relative h-full overflow-hidden rounded-lg">
-          <div className="hidden duration-700 ease-in-out" data-carousel-item>
+          <div className="duration-700 ease-in-out" data-carousel-item>
             <img
               src={Logo1}
               className="absolute inset-0 w-full h-full object-cover"
