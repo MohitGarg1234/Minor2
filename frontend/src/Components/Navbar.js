@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { initFlowbite } from "flowbite";
 import { UserContext } from "../context/userContext";
 
-const Navbar = () => {
+const Navbar = ({unreadCount}) => {
   initFlowbite();
   let location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +17,37 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+  // const [unreadCount, setUnreadCount] = useState(0);
+  // const fetchUnreadCount = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:5000/api/notifications/unread-count/${currentUserId}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         credentials: "include", // Include credentials if you're using cookies for authentication
+  //       }
+  //     );
 
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log(data);
+  //       setUnreadCount(data.unreadCount); // Update the unread count in the state
+  //     } else {
+  //       console.error("Failed to fetch unread notification count");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching unread notification count:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (currentUserId) {
+  //     fetchUnreadCount();
+  //   }
+  //   // eslint-disable-next-line
+  // }, [currentUserId]);
   return (
     <>
       <div
@@ -126,6 +156,25 @@ const Navbar = () => {
                   }`}
                 >
                   Ask For Referral
+                </Link>
+              </li>
+              <li className="mr-4">
+                <Link
+                  to="/notification"
+                  className={`nav-link ${
+                    location.pathname === "/notification"
+                      ? "ml-2 block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+                      : ""
+                  }`}
+                >
+                  <div className="notification-icon cursor-pointer relative">
+                    <i className="fa fa-bell text-2xl"></i>
+                    {unreadCount > 0 && (
+                      <span className="badge bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </div>
                 </Link>
               </li>
             </ul>

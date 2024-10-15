@@ -1,3 +1,5 @@
+const  {createServer} = require("http");
+const {Server} = require("socket.io");
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -11,6 +13,7 @@ const articlesRoute = require('./routes/articlesRoute.js')
 const experienceRoute = require('./routes/experienceRoute.js')
 const skillRoute = require('./routes/skillRoute.js')
 const authAdminRoutes = require('./routes/AdminAuth.js')
+const notificationRoutes = require('./routes/NotificationRoute.js')
 const multer = require('multer');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
@@ -18,6 +21,42 @@ const path = require('path');
 const PORT = process.env.PORT || 5000;
 require('dotenv').config();
 // Connect to MongoDB
+const server = createServer(app);
+const io = new Server(server,{
+  cors:{
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,  
+  }
+});
+const userSocketMap = new Map();
+io.on("connection",(socket)=>{
+  console.log("Client connected",socket.id);
+  socket.emit("Welcome","Welcome to the server");
+  socket.on("join", (userId) => {
+    userSocketMap.set(userId, socket.id); // Map user ID to socket ID
+    console.log(`User ${userId} joined with socket ID: ${socket.id}`);
+  });
+
+  // Handle user disconnect
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
+    // Find and remove the disconnected user from the map
+    for (const [userId, socketId] of userSocketMap.entries()) {
+      if (socketId === socket.id) {
+        userSocketMap.delete(userId);
+        break;
+      }
+    }
+  });
+})
+// Pass io and userSocketMap to your routes
+app.use((req, res, next) => {
+  req.io = io;
+  req.userSocketMap = userSocketMap;
+  next();
+});
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -26,7 +65,11 @@ mongoose.connect(process.env.MONGO_URI, {
 }).catch(err => {
   console.error("Error connecting to MongoDB:", err);
 });
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,  
+  }));
 app.use(bodyParser.json());
 
 app.use(express.static(__dirname+"/"))
@@ -59,8 +102,9 @@ app.use('/api',messageRoute)
 app.use('/api',articlesRoute)
 app.use('/api',experienceRoute)
 app.use('/api',skillRoute)
-app.use('/api',authAdminRoutes);
+app.use('/api',authAdminRoutes); 
+app.use('/api',notificationRoutes); 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -86,6 +86,9 @@ const UserSchema = new mongoose.Schema({
   ],
   image :{
     type : String,
+  },
+  unreadNotifications :{
+    type : Number,
   }
 });
 module.exports = mongoose.model("User", UserSchema);

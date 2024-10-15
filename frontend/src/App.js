@@ -19,13 +19,40 @@ import Askforreferal from './Components/Askforreferal';
 import Message from './Components/Message';
 import ChatArea from './Components/ChatArea';
 import Dashboard from './Components/Dashboard';
+import {io} from "socket.io-client";
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { UserContext } from './context/userContext';
 function App() {
   const token = localStorage.getItem('token');
+  const [unreadCount, setUnreadCount] = useState(0);
+  const {currentUserId} = useContext(UserContext);
+  const socket = useMemo(()=>io("http://localhost:5000"),[]);
+  useEffect(()=>{
+    if(currentUserId){
+
+      socket.on("connect",()=>{
+        console.log("Connected",socket.id);
+      })
+      console.log(currentUserId);
+      socket.emit("join", currentUserId);
+      socket.on("newNotification", (data) => {
+        console.log("New notification:", data.message);
+        setUnreadCount((prev) => prev + 1); // Increment unread count
+      });
+      socket.on("Welcome",(s)=>{
+        console.log(s);
+      })
+    return ()=>{
+      socket.disconnect();
+    }
+    // eslint-disable-next-line
+    }
+  },[socket, currentUserId]);
   return (
     <div>
       {!token && <Header/>}
       <Router>
-      {token && <Navbar/>}
+      {token && <Navbar unreadCount={unreadCount}/>}
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/signup" element={<Signup/>} />
@@ -39,7 +66,7 @@ function App() {
           <Route path='/askforreferal' element={<Askforreferal/>}/>
           <Route path='/resume' element={<Resume/>}/>
           <Route path='/setting' element={<Setting/>}/>
-          <Route path='/notification' element={<Notification/>}/>
+          <Route path='/notification' element={<Notification unreadCount={unreadCount} setUnreadCount={setUnreadCount}/>}/>
           <Route path='/message' element={<Message/>}/>
           <Route path='/chatarea' element={<ChatArea/>} />
           <Route path='/dashboard' element={<Dashboard/>}/>
