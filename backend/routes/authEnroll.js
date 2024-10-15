@@ -152,9 +152,9 @@ router.put('/updateUserDetails',async (req, res) => {
           .json({ success: false, message: "Invalid credentials" });
       }
       // Generate token
-      const token = jwt.sign({ userId: user.id }, JWT_SECRET_KEY);
+      const token = jwt.sign({ userId: user.id, role: 'user' }, JWT_SECRET_KEY,{expiresIn:'1d'});
       // console.log(token);
-      res.status(200).json({ success: true, message: "Login successful!", token });
+      res.status(200).json({ success: true, message: "Login successful!", token, role:'user' });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server error" });

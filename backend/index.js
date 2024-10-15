@@ -25,7 +25,7 @@ const server = createServer(app);
 const io = new Server(server,{
   cors:{
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST","PUT"],
     credentials: true,  
   }
 });
@@ -67,7 +67,7 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 app.use(cors({
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST","PUT"],
     credentials: true,  
   }));
 app.use(bodyParser.json());

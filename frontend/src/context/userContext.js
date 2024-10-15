@@ -27,6 +27,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
       if (!token) {
         console.error('No token found in localStorage');
         return;
@@ -38,16 +39,18 @@ export const UserProvider = ({ children }) => {
       }
       const currentUserId = decodedToken.userId 
       setCurrentUserId(currentUserId);
-      try {
-        const response = await fetch(`http://localhost:5000/api/${currentUserId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch user details');
+      if(role==='user'){
+        try {
+          const response = await fetch(`http://localhost:5000/api/${currentUserId}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch user details');
+          }
+          const data = await response.json();
+          setUser(data);
+          setConnectionsCount(data.connections.length);
+        } catch (error) {
+          console.error('Error fetching user details:', error);
         }
-        const data = await response.json();
-        setUser(data);
-        setConnectionsCount(data.connections.length);
-      } catch (error) {
-        console.error('Error fetching user details:', error);
       }
     };
 

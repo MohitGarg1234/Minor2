@@ -100,7 +100,7 @@ router.post("/admin/login", async (req, res) => {
     const token = jwt.sign({ userId: user.id }, JWT_SECRET_KEY);
     res
       .status(200)
-      .json({ success: true, message: "Login successful!", token });
+      .json({ success: true, message: "Login successful!", token, role:'admin' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -110,35 +110,43 @@ router.post("/admin/login", async (req, res) => {
 router.post("/admin/forgot-password", async (req, res) => {
   const { email } = req.body;
   console.log("HELLO");
+
   try {
     const user = await Admin.findOne({ email });
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
+
+    // Generate OTP and store it
     const otp = generateOTP();
     console.log(otp);
     enrollmentOTPMap.set(email, otp);
+
     const mailOptions = {
       from: process.env.EMAIL_NAME,
       to: user.email,
       subject: "OTP for Password Reset",
       text: `Your OTP for password reset is: ${otp}`,
     };
+
+    // Respond to the client immediately
+    res.json({ success: true, message: "Email is valid" });
+
+    // Send OTP email asynchronously without blocking the response
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return res
-          .status(500)
-          .json({ success: false, message: "Failed to send OTP" });
+        console.error("Failed to send OTP:", error);
+        return; // Don't send a response back, just log the error
       }
-      res.json({ success: true, message: "OTP sent to your email" });
+      console.log("OTP sent successfully:", info.response);
     });
+
   } catch (error) {
     console.error("Error during password reset:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
+
 // OTP Verification
 router.post("/admin/verify-otp", (req, res) => {
   const { email, otp } = req.body;
@@ -150,7 +158,7 @@ router.post("/admin/verify-otp", (req, res) => {
   }
 });
 // Update user details with new password
-router.put("/admin/reset-password", async (req, res) => {
+router.post("/admin/reset-password", async (req, res) => {
   const { email, newPassword } = req.body;
   try {
     const user = await Admin.findOne({ email });
