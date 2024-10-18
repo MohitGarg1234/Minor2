@@ -194,15 +194,20 @@ router.get("/admin/getAdminDetails", verifyToken, async (req, res) => {
 // Articles Related API's
 router.get('/admin/getPosts',async (req,res) =>{
   try {
-    const articles = await Articles.find();
-    res.status(200).json(articles);
+    const articles = await Articles.find({}).populate("author");
+    const reversedData = articles.reverse();
+    res.status(200).json({ articles: reversedData });
   } catch (error) {
     res.status(500).json({ message: 'Server error, could not retrieve articles.' });
   }
 });
-router.delete("/admin/deletePost",async(req,res) =>{
+router.post("/admin/deletePost/:id",async(req,res) =>{
   try {
-    const { id } = req.body;
+    const { id } = req.params;
+    if(!id){
+      return res.status(400).json({ message: 'Please provide the id of the post you want to delete.' });
+    }
+    console.log(id);
     const article = await Articles.findByIdAndDelete(id);
     res.status(200).json({ message: 'Article deleted successfully.',article:article });
   }

@@ -18,8 +18,8 @@ const AdminArticlePost = () => {
   const handleDelete = async (articleId) => {
     console.log("Deleting article with ID:", articleId);
     try {
-      const response = await fetch(`http://127.0.0.1:5000/admin/deletePost/${articleId}`, {
-        method: 'DELETE',
+      const response = await fetch(`http://127.0.0.1:5000/api/admin/deletePost/${articleId}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         }
@@ -48,7 +48,7 @@ const AdminArticlePost = () => {
       if (image) {
         formData.append("image", image);
       }
-      const response = await fetch("http://127.0.0.1:5000/api/articles", {
+      const response = await fetch("http://127.0.0.1:5000/api/admin/addPost", {
         method: "POST",
         body: formData,
         headers: {
@@ -69,8 +69,8 @@ const AdminArticlePost = () => {
 
   const fetchArticles = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/fetchArticles", {
-        method: "POST",
+      const response = await fetch("http://127.0.0.1:5000/api/admin/getPosts", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },

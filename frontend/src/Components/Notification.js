@@ -208,44 +208,51 @@ const Notification = ({unreadCount,setUnreadCount}) => {
   };
 
   useEffect(() => {
-    fetchNotifications();
-    markAsRead();
+      fetchNotifications();
+      markAsRead();
     // eslint-disable-next-line
-  }, []);
+  }, [currentUserId]);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 max-w-lg mx-auto mt-10">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Notifications</h2>
-      </div>
-      <div className="space-y-4">
-        {notifications.length === 0 ? (
-          <p className="text-center text-gray-500">No notifications available</p>
-        ) : (
-          notifications.map((notification) => (
-            <div
-              key={notification._id}
-              className="flex items-start p-4 border-b last:border-b-0 transition duration-300 hover:bg-blue-50 rounded-lg"
-            >
-              <div className="flex-shrink-0 mr-4">
-                <img
-                  src={Logo}
-                  alt="Profile"
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-              </div>
-              <div className="flex-grow">
-                <p className="text-gray-800 font-medium">
-                  {notification.sender.name} liked your post
-                </p>
-                <p className="text-gray-600">{notification.article.content}</p>
-                <p className="text-gray-500 text-xs">{new Date(notification.createdAt).toLocaleString()}</p>
-              </div>
+  <div className="flex items-center justify-between mb-4">
+    <h2 className="text-lg font-semibold">Notifications</h2>
+  </div>
+  <div className="space-y-4">
+    {notifications.length === 0 ? (
+      <p className="text-center text-gray-500">No notifications available</p>
+    ) : (
+      notifications.map((notification) => {
+        // Check if both sender and article are present
+        if (!notification.sender || !notification.article) {
+          return null; // Skip rendering this notification
+        }
+        
+        return (
+          <div
+            key={notification._id}
+            className="flex items-start p-4 border-b last:border-b-0 transition duration-300 hover:bg-blue-50 rounded-lg"
+          >
+            <div className="flex-shrink-0 mr-4">
+              <img
+                src={Logo}
+                alt="Profile"
+                className="w-12 h-12 rounded-full object-cover"
+              />
             </div>
-          ))
-        )}
-      </div>
-    </div>
+            <div className="flex-grow">
+              <p className="text-gray-800 font-medium">
+                {notification.sender.name} liked your post
+              </p>
+              <p className="text-gray-600">{notification.article.content}</p>
+              <p className="text-gray-500 text-xs">{new Date(notification.createdAt).toLocaleString()}</p>
+            </div>
+          </div>
+        );
+      })
+    )}
+  </div>
+</div>
   );
 };
 
