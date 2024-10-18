@@ -26,10 +26,13 @@ import { io } from "socket.io-client";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { UserContext } from "./context/userContext";
 import AdminLogin from "./Components/AdminLogin";
-import AdminHomePage from "./Components/AdminHomePage";
+// import AdminHomePage from "./Components/AdminHomePage";
 import AdminForgotPassword from "./Components/AdminForgotPassword";
 import AdminVerifyOTP from "./Components/AdminVerifyOTP";
 import AdminResetPassword from "./Components/AdminResetPassword";
+import AdminJobPost from "./Components/AdminJobPost";
+import AdminArticlePost from "./Components/AdminArticlePost";
+import AdminAnnouncement from "./Components/AdminAnnouncement";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -97,7 +100,11 @@ function App() {
           ) : null}
           {token && role === "admin" ? (
             <>
-              <Route path="/adminHomepage" element={<AdminHomePage />} />
+              <Route path="/adminHomepage" element={<AdminArticlePost />} />
+              <Route path="/job-post" element={<AdminJobPost/>}/>
+              <Route path="/article-post" element={<AdminArticlePost/>}/>
+              <Route path="/announcements" element={<AdminAnnouncement />} />
+              <Route path="/jobopeningpage" element={<JobOpeningPage />} />
             </>
           ) : null}
         </Routes>
