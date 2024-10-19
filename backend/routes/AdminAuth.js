@@ -109,7 +109,6 @@ router.post("/admin/login", async (req, res) => {
 // Forgot password functionality
 router.post("/admin/forgot-password", async (req, res) => {
   const { email } = req.body;
-  console.log("HELLO");
 
   try {
     const user = await Admin.findOne({ email });
@@ -207,7 +206,6 @@ router.post("/admin/deletePost/:id",async(req,res) =>{
     if(!id){
       return res.status(400).json({ message: 'Please provide the id of the post you want to delete.' });
     }
-    console.log(id);
     const article = await Articles.findByIdAndDelete(id);
     res.status(200).json({ message: 'Article deleted successfully.',article:article });
   }
@@ -238,25 +236,24 @@ router.post("/admin/addPost", upload.single("image"), async (req, res) => {
 // Job Post Realted API's
 router.get("/admin/getJobs",async (req,res)=>{
   try{
-    const jobs = await Jobs.find();
+    const jobs = await Jobs.find().populate("postedBy");
     res.status(200).json(jobs);
   }
   catch(error){
     res.status(500).json({error:error.message});
   }
 })
-router.delete("/admin/deleteJob",async(req,res)=>{
+router.post("/admin/deleteJob/:id",async(req,res)=>{
   try{
-    const {id} = req.body;
+    const {id} = req.params;
     const job = await Jobs.findByIdAndDelete(id);
-    res.status(200).json({message:'Job deleted successfully.',job:job});
-    
+    res.status(200).json({message:'Job deleted successfully.',job:job}); 
   }
   catch(error){
     res.status(500).json({error:error.message});
   }
 });
-router.post("/admin/postJob",verifyToken,async(req,res)=>{
+router.post("/admin/postJob",async(req,res)=>{
   try{
     const {
       CompanyName,

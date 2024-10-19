@@ -33,6 +33,7 @@ import AdminResetPassword from "./Components/AdminResetPassword";
 import AdminJobPost from "./Components/AdminJobPost";
 import AdminArticlePost from "./Components/AdminArticlePost";
 import AdminAnnouncement from "./Components/AdminAnnouncement";
+import AdminJobPosting from "./Components/AdminJobPosting";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -104,7 +105,7 @@ function App() {
               <Route path="/job-post" element={<AdminJobPost/>}/>
               <Route path="/article-post" element={<AdminArticlePost/>}/>
               <Route path="/announcements" element={<AdminAnnouncement />} />
-              <Route path="/jobopeningpage" element={<JobOpeningPage />} />
+              <Route path="/adminjobposting" element={<AdminJobPosting />} />
             </>
           ) : null}
         </Routes>

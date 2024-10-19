@@ -4,12 +4,15 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./context/userContext";
+import { AdminProvider } from "./context/adminContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
-    <UserProvider>
-      <App />
-    </UserProvider>
+    <AdminProvider>
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </AdminProvider>
   </>
 );
 
