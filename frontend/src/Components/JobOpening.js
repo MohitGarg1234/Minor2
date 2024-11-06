@@ -68,7 +68,7 @@ const JobOpening = () => {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/jobopenings");
+      const response = await fetch(`http://127.0.0.1:5000/api/jobOpenings/${currentUserId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch job openings");
       }
@@ -81,8 +81,7 @@ const JobOpening = () => {
       console.error("Error fetching job openings:", error);
       setLoading(false);
     }
-  }, []);
-
+  }, [currentUserId]);
   useEffect(() => {
     if (!dataFetched) {
       fetchJobOpenings();
@@ -139,6 +138,8 @@ const JobOpening = () => {
 };
 
 const JobListing = ({ job }) => {
+  const matchPercentageColor = job.matchPercentage > 50 ? 'text-green-500' : 'text-red-500';
+  console.log(job.ApplyLinks);
   return (
       <div className="w-full md:w-10/12 md:ml-5 lg:w-10/12 mt-5">
         <div className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
@@ -150,7 +151,7 @@ const JobListing = ({ job }) => {
               Role - {job.Role}
             </p>
             <p className="text-sm text-gray-700 dark:text-gray-300">
-              Type - {job.JobType}
+              Type - {job.Type}
             </p>
             <p className="text-sm text-gray-700 dark:text-gray-300">
               Experience - {job.Experience}
@@ -163,6 +164,11 @@ const JobListing = ({ job }) => {
                 Posted By - {job.userDetails.name}
               </p>
             )}
+            {job.matchPercentage > 0 &&
+              <p className={`text-sm font-bold ${matchPercentageColor}`}>
+                Skills Matching - {job.matchPercentage}%
+              </p>
+            }
           </div>
           <div className="flex flex-col justify-center items-center space-y-4 mr-2">
             <a href={job.ApplyLinks} rel="noreferrer" target="_blank" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3"

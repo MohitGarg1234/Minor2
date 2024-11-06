@@ -174,9 +174,9 @@ const JobOpeningPage = () => {
             htmlFor="SkillsRequired"
             className="block mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Skills Requirements
+            Skills Requirements (Comma Separated)
           </label>
-          <textarea
+          <input
             type="text"
             id="SkillsRequired"
             name="SkillsRequired"
