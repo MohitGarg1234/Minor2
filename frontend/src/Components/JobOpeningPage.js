@@ -1,5 +1,7 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../context/userContext";
+import { FaBuilding, FaFileAlt, FaBriefcase, FaCalendarAlt, FaMoneyBill, FaMapMarkerAlt, FaChartLine, FaToolbox, FaLink } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
 
 const JobOpeningPage = () => {
   const {currentUserId} = useContext(UserContext);
@@ -55,9 +57,9 @@ const JobOpeningPage = () => {
   return (
     <>
       <div className="w-1/3 mx-auto">
-        <div className="text-center border border-gray-300 p-2 rounded-full">
+        <div className="text-center p-2">
           <h2
-            className="text-lg font-semibold text-gray-800 rounded-full"
+            className="text-lg font-semibold text-gray-800 rounded-2xl mt-20 mb-4"
             style={{ padding: "10px", backgroundColor: "rgb(182, 187, 194)" }}
           >
             Enter Details of the Job
@@ -69,24 +71,24 @@ const JobOpeningPage = () => {
         <form onSubmit={handleSubmit}>
           <label
             htmlFor="CompanyName"
-            className="block mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mb-2 text-sm font-medium text-gray-700"
           >
-            Company Name
+            <FaBuilding className="mr-2 text-blue-500" /> Company Name
           </label>
           <input
             type="text"
             id="CompanyName"
             name="CompanyName"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
             value={formData.CompanyName} onChange={handleChange}
             required
           />
 
           <label
             htmlFor="JobDescription"
-            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Job Description
+            <FaFileAlt className="mr-2 text-green-500" /> Job Description
           </label>
           <textarea
             id="JobDescription"
@@ -99,9 +101,9 @@ const JobOpeningPage = () => {
 
           <label
             htmlFor="Role"
-            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Role
+            <FaBriefcase className="mr-2 text-purple-500" /> Role
           </label>
           <input
             type="text"
@@ -113,9 +115,9 @@ const JobOpeningPage = () => {
           />
           <label
             htmlFor="JobType"
-            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Job Type
+            <FaCalendarAlt className="mr-2 text-yellow-500" /> Job Type
           </label>
           <input
             type="text"
@@ -127,9 +129,9 @@ const JobOpeningPage = () => {
           />
           <label
             htmlFor="JobSalary"
-            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Job Salary
+            <FaMoneyBill className="mr-2 text-green-600" /> Job Salary
           </label>
           <input
             type="text"
@@ -142,9 +144,9 @@ const JobOpeningPage = () => {
 
           <label
             htmlFor="JobLocation"
-            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Job Location
+            <FaMapMarkerAlt className="mr-2 text-red-500" /> Job Location
           </label>
           <input
             type="text"
@@ -157,9 +159,9 @@ const JobOpeningPage = () => {
 
           <label
             htmlFor="Experience"
-            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Experience Required
+            <FaChartLine className="mr-2 text-blue-600" /> Experience Required
           </label>
           <input
             type="text"
@@ -172,9 +174,9 @@ const JobOpeningPage = () => {
 
           <label
             htmlFor="SkillsRequired"
-            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Skills Requirements (Comma Separated)
+            <FaToolbox className="mr-2 text-indigo-500" /> Skills Requirements
           </label>
           <input
             type="text"
@@ -188,9 +190,9 @@ const JobOpeningPage = () => {
 
           <label
             htmlFor="ApplyLinks"
-            className="block mt-4 mb-2 text-sm font-medium text-gray-700"
+            className="flex items-center mt-4 mb-2 text-sm font-medium text-gray-700"
           >
-            Apply Links
+            <FaLink className="mr-2 text-blue-700" /> Apply Links
           </label>
           <input
             type="text"
@@ -206,9 +208,9 @@ const JobOpeningPage = () => {
 
           <button
             type="submit"
-            className="mt-6 w-30 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+            className="mt-6 w-30 bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
           >
-            Job Post
+            <FaPaperPlane className="mr-2" /> Post Job
           </button>
         </form>
       </div>

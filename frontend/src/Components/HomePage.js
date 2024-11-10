@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../context/userContext";
-import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import { FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 
 const HomePage = () => {
   const { currentUserId } = useContext(UserContext);
@@ -8,10 +9,40 @@ const HomePage = () => {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [articles, setArticles] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
   const token = localStorage.getItem("token");
   const author = currentUserId;
 
+  const [announcementModal, setannouncementModal] = useState(false);
+  const [selectedAnnouncment, setselectedAnnouncment] = useState(null);
+
+  const toggleAnnouncemntModal = () => setannouncementModal(!announcementModal);
+
   const toggleModal = () => setIsModalOpen(!isModalOpen);
+
+  const handleAnnouncementClick = (announcement) => {
+    console.log(announcement);
+    setselectedAnnouncment(announcement);
+    toggleAnnouncemntModal();
+  };
+
+  // Fetch Announcements
+  const fetchAnnouncements = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:5000/api/admin/getAnnouncements",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!response.ok) throw new Error("Failed to fetch announcements");
+      const data = await response.json();
+      setAnnouncements(data);
+    } catch (error) {
+      console.error("Error fetching announcements:", error.message);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,14 +84,26 @@ const HomePage = () => {
         throw new Error("Failed to fetch articles");
       }
       const data = await response.json();
-      setArticles(data.articles.map(article => ({
-        ...article,
-        like: Array.isArray(article.reactions) && article.reactions.some(reaction => reaction.user === currentUserId && reaction.type === 'like'),
-        dislike: Array.isArray(article.reactions) && article.reactions.some(reaction => reaction.user === currentUserId && reaction.type === 'dislike'),
-        author: {
-          ...article.author // Ensure the author object remains intact
-        }
-      })));
+      setArticles(
+        data.articles.map((article) => ({
+          ...article,
+          like:
+            Array.isArray(article.reactions) &&
+            article.reactions.some(
+              (reaction) =>
+                reaction.user === currentUserId && reaction.type === "like"
+            ),
+          dislike:
+            Array.isArray(article.reactions) &&
+            article.reactions.some(
+              (reaction) =>
+                reaction.user === currentUserId && reaction.type === "dislike"
+            ),
+          author: {
+            ...article.author, // Ensure the author object remains intact
+          },
+        }))
+      );
     } catch (error) {
       console.error("Error fetching articles:", error.message);
     }
@@ -68,18 +111,22 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchArticles();
+    fetchAnnouncements();
     // eslint-disable-next-line
   }, []);
 
   const handleReact = async (index, articleId, reactionType) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/api/${articleId}/react/${currentUserId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ reactionType })
-      });
+      const response = await fetch(
+        `http://127.0.0.1:5000/api/${articleId}/react/${currentUserId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ reactionType }),
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to ${reactionType} article`);
       }
@@ -93,8 +140,11 @@ const HomePage = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen pb-4" style={{ backgroundColor: "#f5efe7" }}>
-      <div className="flex justify-center py-4">
+    <div
+      className="bg-gray-100 min-h-screen pb-4"
+      style={{ backgroundColor: "#f5efe7" }}
+    >
+      <div className="flex justify-center py-4 pt-20">
         <button
           onClick={toggleModal}
           className="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
@@ -104,20 +154,29 @@ const HomePage = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" >
-          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 max-w-md w-full max-h-full overflow-y-auto" style={{ backgroundColor: "rgb(233 229 197)" }}
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div
+            className="relative bg-white rounded-lg shadow dark:bg-gray-700 max-w-md w-full max-h-full overflow-y-auto"
+            style={{ backgroundColor: "rgb(233 229 197)" }}
           >
-            <div className="flex justify-between items-center p-5 border-b dark:border-gray-600">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">New Post</h3>
-              <button onClick={toggleModal} className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-2 dark:hover:bg-gray-600 dark:hover:text-white">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-              </button>
+            <div className="flex justify-between py-4 text-blue-800 border-b-slate-400 border-b-2 mx-4">
+              <span className="text-lg font-medium text-blue-800 dark:text-white ">
+                New Post
+              </span>
+              <RxCross2
+                size={23}
+                className="mt-2 cursor-pointer hover:text-black "
+                onClick={toggleModal}
+              />
             </div>
-            <form className="p-6" onSubmit={handleSubmit} >
+            <form className="p-6" onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-white">Article Description</label>
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 dark:text-white"
+                >
+                  Article Description
+                </label>
                 <textarea
                   id="description"
                   rows="4"
@@ -129,7 +188,12 @@ const HomePage = () => {
                 ></textarea>
               </div>
               <div className="mb-4">
-                <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-white">Upload Image</label>
+                <label
+                  htmlFor="image"
+                  className="block text-sm font-medium text-gray-700 dark:text-white"
+                >
+                  Upload Image
+                </label>
                 <input
                   id="image"
                   type="file"
@@ -155,19 +219,73 @@ const HomePage = () => {
         </div>
       )}
 
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center space-y-4" >
+      <div className="container mx-auto px-4 flex">
+        {/* Announcements Sidebar */}
+        <div className="w-1/3">
+          <div className="fixed w-1/4 p-4 bg-white rounded-lg shadow-md  ml-10 ">
+            <h2 className="text-lg font-semibold mb-4 text-center">📢 Announcements</h2>
+            {announcements.length > 0 ? (
+              <ul>
+                {announcements.map((announcement, index) => (
+                  <li key={index} className="mb-4">
+                    <h4
+                      className="font-medium border-b-2 cursor-pointer hover:underline hover:text-blue-500"
+                      onClick={() => handleAnnouncementClick(announcement)}
+                    >
+                      {announcement.title}
+                    </h4>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No announcements available</p>
+            )}
+
+            {announcementModal && selectedAnnouncment && (
+              <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                <div
+                  className="relative bg-white rounded-lg shadow-lg p-6 max-w-lg w-full"
+                  style={{ backgroundColor: "rgb(233 229 197)" }}
+                >
+                  <div className="flex border-b-gray-500 border-b-2 text-blue-800 mb-2">
+                    <span className="text-xl font-semibold  mb-2 ">
+                      {selectedAnnouncment.title}
+                    </span>
+                    <RxCross2
+                      size={23}
+                      className="mt-2 cursor-pointer hover:text-black"
+                      onClick={toggleAnnouncemntModal}
+                    />
+                  </div>
+                  <p>{selectedAnnouncment.description}</p>
+                  <p className="mt-2 text-sm text-gray-500">
+                    Published on:{" "}
+                    {new Date(selectedAnnouncment.date).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Articles Section */}
+        <div className="flex flex-col space-y-4 ml-20">
           {articles.map((article, index) => (
-            <div key={index} className="w-full md:w-1/2 lg:w-1/3 bg-white rounded-lg shadow-md overflow-hidden" >
+            <div
+              key={index}
+              className="w-full md:w-1/2 lg:w-3/5 bg-white rounded-lg shadow-md overflow-hidden"
+            >
               <div className="p-4">
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-4 border-b-2">
                   <img
-                    className="w-10 h-10 rounded-full mr-4"
+                    className="w-10 h-10 rounded-full mr-4 mb-2"
                     src={article.author.image}
                     alt="Author"
                   />
                   <div>
-                    <h5 className="text-lg font-medium">{article.author.name}</h5>
+                    <h5 className="text-lg font-medium">
+                      {article.author.name}
+                    </h5>
                   </div>
                 </div>
                 <p className="text-gray-700">{article.content}</p>
@@ -180,15 +298,19 @@ const HomePage = () => {
                 )}
                 <div className="flex mt-4 items-center">
                   <button
-                    onClick={() => handleReact(index, article._id, 'like')}
-                    className={`mr-2 text-2xl ${article.likes ? "text-blue-500" : "text-gray-500"}`}
+                    onClick={() => handleReact(index, article._id, "like")}
+                    className={`mr-2 text-2xl ${
+                      article.likes ? "text-blue-500" : "text-gray-500"
+                    }`}
                   >
                     <FaThumbsUp />
                   </button>
                   <span className="mr-2">{article.likes}</span>
                   <button
-                    onClick={() => handleReact(index, article._id, 'dislike')}
-                    className={`ml-2 text-2xl ${article.dislikes ? "text-red-500" : "text-gray-500"}`}
+                    onClick={() => handleReact(index, article._id, "dislike")}
+                    className={`ml-2 text-2xl ${
+                      article.dislikes ? "text-red-500" : "text-gray-500"
+                    }`}
                   >
                     <FaThumbsDown />
                   </button>

@@ -7,6 +7,10 @@ import UpdateExperience from "./UpdateExperience";
 import AddSkills from "./AddSkills";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaEnvelope, FaPhoneAlt, FaLinkedin } from "react-icons/fa";
+import { FaGraduationCap } from "react-icons/fa";
+
+
 
 const Dashboard = () => {
   const { user, connectionsCount, currentUserId } = useContext(UserContext);
@@ -90,118 +94,109 @@ const Dashboard = () => {
 
   return (
     <div
-      className="flex flex-col items-center min-h-screen"
+      className="flex flex-col items-center min-h-screen "
       style={{ backgroundColor: "#f5efe7", padding: "20px" }}
     >
       <div
-        className="card"
+        className="card mt-16 bg-gray-100 rounded-lg shadow-lg p-6 mx-auto"
         style={{
-          backgroundColor: "lightgray",
-          borderRadius: "10px",
-          marginBottom: "20px",
           width: "50%",
+          marginBottom: "20px",
         }}
       >
-        <img
-          src={user && user.image}
-          alt=""
-          style={{
-            height: "20vh",
-            width: "10vw",
-            padding: "10px",
-            borderRadius: "50%",
-          }}
-        />
-        <div className="flex flex-col justify-between p-4 leading-normal">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {user.name}
-          </h5>
-          {user.Experience[0] &&
-          <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
-            {user.Experience[0].companyName} | {user.Experience[0].role}
-          </p>
-          }
-          <Link
-            to="/allConnections"
-            className="font-normal text-blue-700 dark:text-gray-400"
-          >
-            {connectionsCount} connections
-          </Link>
+        <div className="flex items-center mb-4">
+          <img
+            src={user && user.image}
+            alt=""
+            className="rounded-full border-2 border-gray-300"
+            style={{
+              height: "100px",
+              width: "100px",
+              padding: "3px",
+              marginRight: "15px",
+            }}
+          />
+          <div>
+            <h5 className="text-xl font-bold text-gray-900 dark:text-white">
+              {user.name}
+            </h5>
+            {user.Experience[0] && (
+              <p className="text-gray-700 dark:text-gray-400">
+                {user.Experience[0].companyName} | {user.Experience[0].role}
+              </p>
+            )}
+            <Link
+              to="/allConnections"
+              className="text-blue-600 hover:underline dark:text-gray-400"
+            >
+              {connectionsCount} connections
+            </Link>
+          </div>
         </div>
-        <div className="pl-4">
+        <div className="pl-2">
           {user.emailVisibility && (
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Email : {user.email}
-            </p>
+            <p className="flex items-center text-gray-700 dark:text-gray-400 mb-2">
+            <FaEnvelope className="mr-2 text-blue-500" /> Email: {user.email}
+          </p>
           )}
           {user.mobileVisibility && (
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Mobile Number : {user.MobileNumber}
-            </p>
+            <p className="flex items-center text-gray-700 dark:text-gray-400 mb-2">
+            <FaPhoneAlt className="mr-2 text-green-500" /> Mobile: {user.MobileNumber}
+          </p>
           )}
           {user.LinkedInVisibility && (
-            <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              LinkedIn Id : {user.LinkedIn}
-            </p>
+            <p className="flex items-center text-gray-700 dark:text-gray-400 mb-2">
+            <FaLinkedin className="mr-2 text-blue-700" /> LinkedIn: {user.LinkedIn}
+          </p>
           )}
         </div>
       </div>
-      <div
-        className="card"
-        style={{
-          backgroundColor: "lightgray",
-          borderRadius: "10px",
-          width: "50%",
-          padding: "10px",
-        }}
-      >
+      <div className="bg-gray-100 p-6 rounded-lg shadow-md" style={{width:"50%"}}>
         <div className="flex justify-between items-center mb-2">
-          <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h5 className="text-2xl font-bold text-gray-900 dark:text-white">
             Experience
           </h5>
-          <div>
-            <button className="mr-2" onClick={handleOpenModalAddExperience}>
-              <FaPlus />
-            </button>
-            <AddExperience
-              isOpen={isModalOpenAddExperience}
-              onRequestClose={handleCloseModalAddExperience}
-              userId={userId}
-            />
-          </div>
+          <button
+            className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
+            onClick={handleOpenModalAddExperience}
+          >
+            <FaPlus size={14}/>
+          </button>
+          <AddExperience
+            isOpen={isModalOpenAddExperience}
+            onRequestClose={handleCloseModalAddExperience}
+            userId={userId}
+          />
         </div>
         {user.Experience.map((experience, index) => (
           <div
-            style={{ backgroundColor: "lightgray" }}
             key={index}
-            className="p-4 rounded-lg bg-white dark:bg-gray-800"
+            className="p-4 rounded-lg bg-white dark:bg-gray-800 shadow mb-4"
           >
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mb-2">
               <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                 {experience.companyName}
               </p>
               <div className="flex items-center">
-                <button
-                  className="ml-4"
-                  onClick={() =>
-                    handleOpenModalUpdateExperience(experience._id)
-                  }
-                >
-                  <FaPencilAlt />
-                </button>
-                <button
-                  className="ml-4"
-                  onClick={() => handleDeleteExperience(experience._id)}
-                >
-                  <FaTrash />
-                </button>
+              <button
+                className="p-2 rounded-full text-gray-500 hover:text-blue-500 focus:outline-none"
+                onClick={() => handleOpenModalUpdateExperience(experience._id)}
+              >
+                <FaPencilAlt />
+              </button>
+              <button
+                className="p-2 rounded-full text-gray-500 hover:text-red-500 focus:outline-none ml-2"
+                onClick={() => handleDeleteExperience(experience._id)}
+              >
+                <FaTrash />
+              </button>
               </div>
             </div>
             <p className="text-md text-gray-700 dark:text-gray-300">
-              {experience.role}
+              Role: {experience.role}
             </p>
             <p className="text-md text-gray-700 dark:text-gray-300">
-              {experience.years}
+              Duration: {experience.years}
             </p>
           </div>
         ))}
@@ -214,17 +209,10 @@ const Dashboard = () => {
           experienceId={selectedExperienceId}
         />
       )}
-      <div
-        className="card mt-4"
-        style={{
-          backgroundColor: "lightgray",
-          borderRadius: "10px",
-          width: "50%",
-          padding: "10px",
-        }}
-      >
-        <div className="flex justify-between items-center mb-2">
-          <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md my-4" style={{width:"50%"}}>
+        <div className="flex items-center mb-2">
+          <FaGraduationCap className="text-blue-500 dark:text-blue-400 text-2xl mr-2" />
+          <h5 className="text-2xl font-bold text-gray-900 dark:text-white">
             Education
           </h5>
         </div>
@@ -233,20 +221,17 @@ const Dashboard = () => {
         </p>
       </div>
       <div
-        className="card mt-4"
-        style={{
-          backgroundColor: "lightgray",
-          borderRadius: "10px",
-          width: "50%",
-          padding: "10px",
-        }}
+        className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md w-full md:w-1/2 mt-4"
       >
-        <div className="flex justify-between items-center mb-2">
-          <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <div className="flex justify-between items-center mb-4">
+          <h5 className="text-2xl font-bold text-gray-900 dark:text-white">
             Skills
           </h5>
           <div>
-            <button className="mr-2"  onClick={handleOpenModalSkills}>
+            <button
+              className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-400 dark:hover:bg-blue-500 transition duration-300"
+              onClick={handleOpenModalSkills}
+            >
               <FaPlus />
             </button>
             <AddSkills
@@ -258,24 +243,23 @@ const Dashboard = () => {
         </div>
         {user.Skill.map((skill, index) => (
           <div
-            style={{ backgroundColor: "lightgray" }}
             key={index}
-            className="pl-4 rounded-lg bg-white dark:bg-gray-800"
+            className="flex justify-between items-center bg-white dark:bg-gray-700 p-2 rounded-lg mb-1 shadow"
           >
-            <div className="flex justify-between items-center">
-              <p className="font-normal text-gray-700 dark:text-gray-400">
-                {skill.skillName}
-              </p>
+            {/* <div className="flex justify-between items-center"> */}
+            <p className="text-md font-normal text-gray-800 dark:text-gray-100">
+              {skill.skillName}
+            </p>
               <div className="flex items-center">
-                <button
-                  className="mr-2"
-                  onClick={() => handleDeleteSkill(skill._id)}
-                >
-                  <FaTrash />
-                </button>
+              <button
+                className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition duration-300"
+                onClick={() => handleDeleteSkill(skill._id)}
+              >
+                <FaTrash size={10}/>
+              </button>
                 <ToastContainer/>
               </div>
-            </div>
+            {/* </div> */}
           </div>
         ))}
       </div>
