@@ -2,6 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import AdminSidebar from './AdminSidebar';
 import { AdminContext } from "../context/adminContext";
+import { CiCirclePlus } from "react-icons/ci";
+import { FaBuilding, FaBriefcase, FaUserTie, FaTools } from "react-icons/fa";
+import { FiExternalLink, FiTrash2 } from "react-icons/fi"
 const AdminJobPost = () => {
   const [jobOpenings, setJobOpenings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,28 +61,27 @@ const AdminJobPost = () => {
 
   return (
     <div className="flex min-h-screen">
+      <div className='w-1/6'>
       <AdminSidebar />
-      <div className="flex-1 p-10 bg-gray-100">
-        <div className="container mx-auto" style={{ backgroundColor: "rgb(243 244 246 / var(--tw-bg-opacity))", minWidth: "100%" }}>
+      </div>
+      <div className="flex-1 p-10 bg-gray-100" style={{
+        backgroundColor: "#8EC5FC",
+        backgroundImage: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+      }}>
+      <div className="container mx-auto" style={{
+        backgroundColor: "#8EC5FC",
+        backgroundImage: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+      }}>
           <div className="flex-col p-2 ">
             <Link to="/adminjobposting"
-              className="flex items-center justify-center font-medium text-primary-600 hover:underline dark:text-primary-500"
+              className="flex items-center justify-center font-medium text-primary-600 hover:underline dark:text-primary-500 "
             >
               <button
                 id="postJobBtn"
-                className="mt-2 relative bg-blue-500 text-white font-semibold py-2 px-8 rounded-full flex items-center space-x-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600 mb-4"
+                className="mt-2 relative bg-[#4c38a9] text-white font-semibold py-2 px-4 rounded-2xl flex items-center space-x-2 hover:bg-sky-600 focus:outline-none focus:bg-blue-600 mb-4"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-white absolute left-4 top-1/2 transform -translate-y-1/2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <circle cx="12" cy="12" r="11" strokeWidth="2" stroke="white" fill="none" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                </svg>
-                <span className="ml-10">Post a Job</span>
+                <CiCirclePlus size={28}/>
+                <span className="ml-10 ">Post a Job</span>
               </button>
             </Link>
 
@@ -102,44 +104,50 @@ const AdminJobPost = () => {
 const JobListing = ({ job, onDelete }) => {
   return (
     <div className="w-full md:w-10/12 md:ml-5 lg:w-10/12 mt-5">
-      <div className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-        <div className="p-4 w-2/3">
-          <h6 className="font-bold mb-2 text-gray-900 dark:text-white">
-            Company - {job.CompanyName}
-          </h6>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Role - {job.Role}
+    <div className="mb-4 flex items-start bg-[#f3e5f3] border border-gray-200 rounded-lg shadow-md hover:shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 transition-shadow duration-300">
+      {/* Job Information Section */}
+      <div className="p-6 w-2/3">
+        <h6 className="font-bold mb-3 text-gray-900 dark:text-white text-lg flex items-center">
+          <FaBuilding className="mr-2 text-blue-700" /> Company - {job.CompanyName}
+        </h6>
+        <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center mb-1">
+          <FaBriefcase className="mr-2 text-gray-500" /> Role - {job.Role}
+        </p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center mb-1">
+          <FaUserTie className="mr-2 text-gray-500" /> Type - {job.JobType}
+        </p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center mb-1">
+          <FaTools className="mr-2 text-gray-500" /> Experience - {job.Experience}
+        </p>
+        <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center mb-1">
+          <FaTools className="mr-2 text-gray-500" /> Skills - {job.SkillsRequired}
+        </p>
+        {job.postedBy && (
+          <p className="text-sm text-gray-700 dark:text-gray-300 flex items-center">
+            <FaUserTie className="mr-2 text-gray-500" /> Posted By - {job.postedBy.name}
           </p>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Type - {job.JobType}
-          </p>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Experience - {job.Experience}
-          </p>
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            Skills Required - {job.SkillsRequired}
-          </p>
-          {job.postedBy && (
-            <p className="text-sm text-gray-700 dark:text-gray-300">
-              Posted By - {job.postedBy.name}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-col justify-center items-center space-y-4 mr-2">
-          <a href={job.ApplyLinks} rel="noreferrer" target="_blank"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3"
-          >
-            View Job
-          </a>
-          <button
-            onClick={() => onDelete(job._id)}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mx-3"
-          >
-            Delete Job
-          </button>
-        </div>
+        )}
+      </div>
+
+      {/* Action Buttons Section */}
+      <div className="flex flex-col justify-center items-center my-12 space-y-4 mr-4">
+        <a
+          href={job.ApplyLinks}
+          rel="noreferrer"
+          target="_blank"
+          className="flex items-center justify-center w-32 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700 transition-colors duration-200"
+        >
+          <FiExternalLink className="mr-2" /> View Job
+        </a>
+        <button
+          onClick={() => onDelete(job._id)}
+          className="flex items-center justify-center w-32 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-700 transition-colors duration-200"
+        >
+          <FiTrash2 className="mr-2" /> Delete Job
+        </button>
       </div>
     </div>
+</div>
   );
 };
 

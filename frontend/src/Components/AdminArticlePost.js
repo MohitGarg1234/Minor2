@@ -3,6 +3,7 @@ import { UserContext } from "../context/userContext";
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import AdminSidebar from './AdminSidebar'
 import { FaTrash } from 'react-icons/fa';
+import { RxCross2 } from "react-icons/rx";
 
 const AdminArticlePost = () => {
   const { currentUserId } = useContext(UserContext);
@@ -120,13 +121,24 @@ const AdminArticlePost = () => {
 
   return (
     <div className="flex min-h-screen">
-        <AdminSidebar />
-        <div className="flex-1 p-10 bg-gray-100">
-        <div className="bg-gray-100 min-h-screen pb-4">
+      <div className='w-1/6'>
+      <AdminSidebar />
+      </div>
+        <div
+  className="flex-1 p-10 bg-gray-100"
+  style={{
+    backgroundColor: "#8EC5FC",
+    backgroundImage: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+  }}
+>
+        <div className="bg-gray-100 min-h-screen pb-4" style={{
+    backgroundColor: "#8EC5FC",
+    backgroundImage: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+  }}>
           <div className="flex justify-center pb-4">
             <button
               onClick={toggleModal}
-              className="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+              className="px-6 py-2.5 bg-[#4c38a9]  text-white font-medium text-s leading-tight uppercase rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
             >
               Add Post
             </button>
@@ -136,14 +148,17 @@ const AdminArticlePost = () => {
             <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" >
               <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 max-w-md w-full max-h-full overflow-y-auto" style={{ backgroundColor: "rgb(233 229 197)" }}
               >
-                <div className="flex justify-between items-center p-5 border-b dark:border-gray-600">
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white">New Post</h3>
-                  <button onClick={toggleModal} className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg p-2 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
+                <div className="flex justify-between py-4 text-blue-800 border-b-slate-400 border-b-2 mx-4">
+                  <span className="text-lg font-medium text-blue-800 dark:text-white ">
+                    New Post
+                  </span>
+                  <RxCross2
+                    size={23}
+                    className="mt-2 cursor-pointer hover:text-black "
+                    onClick={toggleModal}
+                  />
                 </div>
+
                 <form className="p-6" onSubmit={handleSubmit} >
                   <div className="mb-4">
                     <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-white">Article Description</label>
@@ -185,12 +200,12 @@ const AdminArticlePost = () => {
           )}
 
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid lg:grid-cols-3 md:grid-cols-3" >
+            <div className="grid grid-cols-1 lg:grid lg:grid-cols-2 md:grid-cols-2" >
               {articles.map((article, index) => (
-                <div key={index} className="w-full md:w-5/6 lg:w-11/12 bg-white rounded-lg shadow-md overflow-hidden my-2" >
+                <div key={index} className="w-full md:w-5/6 lg:w-11/12 bg-[#f3e5f3] rounded-lg shadow-md overflow-hidden my-2" >
                   <div className="p-4">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center">
+                  <div className="flex justify-between items-center mb-4 border-b-gray-400 border-b-2">
+                    <div className="flex items-center mb-2">
                       <img
                         className="w-10 h-10 rounded-full mr-4"
                         src={article.author.image}
@@ -199,13 +214,13 @@ const AdminArticlePost = () => {
                       <div>
                         <h5 className="text-lg font-medium">{article.author.name}</h5>
                       </div>
-                      </div>
-                      <FaTrash
-                      onClick={() => handleDelete(article._id)}
-                      className="text-blue-500 cursor-pointer hover:text-blue-700"
-                      size={20} // Adjust the size as needed
-                    />
                     </div>
+                    <FaTrash
+                    onClick={() => handleDelete(article._id)}
+                    className="text-red-500 cursor-pointer hover:text-red-700"
+                    size={18} // Adjust the size as needed
+                    />
+                  </div>
                     <p className="text-gray-700">{article.content}</p>
                     {article.image && (
                       <img
