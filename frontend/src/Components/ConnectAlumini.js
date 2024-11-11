@@ -2,7 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { GoSearch } from "react-icons/go";
-import { FaGraduationCap, FaBuilding, FaBriefcase, FaLinkedin, FaUserPlus } from "react-icons/fa";
+import {
+  FaGraduationCap,
+  FaBuilding,
+  FaBriefcase,
+  FaLinkedin,
+  FaUserPlus,
+} from "react-icons/fa";
 
 const ConnectAlumini = () => {
   const { currentUserId } = useContext(UserContext);
@@ -69,21 +75,22 @@ const ConnectAlumini = () => {
     setSearchQuery(e.target.value);
   };
 
-  const filteredData = randomData.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const filteredData = randomData.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div
       className="flex flex-col items-center justify-center"
       style={{
-        backgroundColor: "#f5efe7",
+        backgroundColor: "#ad866a",
+        backgroundImage:
+          "linear-gradient(62deg, #ad866a 0%, #f9d96c 50%, #f3e4cf 100%)",
         minWidth: "100vw",
         minHeight: "100vh",
       }}
     >
-      <div className="flex justify-center mt-16">
+      <div className="flex justify-center mt-16 ">
         <form className="max-w-md mx-auto mt-2 mb-2 md:mb-0 md:mr-4">
           <label
             htmlFor="default-search"
@@ -92,8 +99,8 @@ const ConnectAlumini = () => {
             Search
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none">
-            <GoSearch size={24}/>
+            <div className="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none ">
+              <GoSearch size={24} />
             </div>
             <input
               type="search"
@@ -106,12 +113,12 @@ const ConnectAlumini = () => {
           </div>
         </form>
       </div>
-      <div className="flex flex-wrap justify-center">
+      <div className="flex flex-wrap justify-center ">
         {filteredData &&
           filteredData.map((items, index) => (
             <div
               key={index}
-              className="m-4 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl md:flex-row md:max-w-2xl dark:border-gray-700 dark:bg-gray-800"
+              className="m-4 w-1/2 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl md:flex-row md:max-w-2xl dark:border-gray-700 dark:bg-gray-800"
             >
               <img
                 className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
@@ -124,30 +131,38 @@ const ConnectAlumini = () => {
                   {items.name}
                 </h6>
                 <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 mb-1">
-                  <FaGraduationCap className="mr-2 text-blue-500" /> Graduation Year: {items.YearOfGraduation}
+                  <FaGraduationCap className="mr-2 text-blue-500" /> Graduation
+                  Year: {items.YearOfGraduation}
                 </p>
                 <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 mb-1">
-                  <FaBriefcase className="mr-2 text-blue-500" /> Education: {items.Education}
+                  <FaBriefcase className="mr-2 text-blue-500" /> Education:{" "}
+                  {items.Education}
                 </p>
                 {items.Experience[0] && (
                   <div>
                     <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 mb-1">
-                      <FaBuilding className="mr-2 text-blue-500" /> Current Company: {items.Experience[0].companyName}
+                      <FaBuilding className="mr-2 text-blue-500" /> Current
+                      Company: {items.Experience[0].companyName}
                     </p>
                     <p className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                      <FaBriefcase className="mr-2 text-blue-500" /> Role: {items.Experience[0].role}
+                      <FaBriefcase className="mr-2 text-blue-500" /> Role:{" "}
+                      {items.Experience[0].role}
                     </p>
                   </div>
                 )}
               </div>
               <div className="p-4 flex flex-col items-center space-y-3 md:space-y-2 w-full md:w-auto">
-                <Link to={items.LinkedIn} target="_blank" rel="noopener noreferrer">
-                <button
-                  type="button"
-                  className="flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700"
+                <Link
+                  to={items.LinkedIn}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <FaLinkedin className="mr-2" /> LinkedIn
-                </button>
+                  <button
+                    type="button"
+                    className="flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700"
+                  >
+                    <FaLinkedin className="mr-2" /> LinkedIn
+                  </button>
                 </Link>
                 <button
                   onClick={() => handleConnect(items._id)}

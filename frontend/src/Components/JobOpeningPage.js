@@ -55,19 +55,28 @@ const JobOpeningPage = () => {
     }
   };
   return (
-    <>
-      <div className="w-1/3 mx-auto">
-        <div className="text-center p-2">
+    <div style={{
+      backgroundColor: "#ad866a",
+      backgroundImage:
+        "linear-gradient(62deg, #ad866a 0%, #f9d96c 50%, #f3e4cf 100%)",
+      // minWidth: "100%",
+    }}>
+      <div className="w-1/3 mx-auto" >
+        <div className="text-center p-2" >
           <h2
             className="text-lg font-semibold text-gray-800 rounded-2xl mt-20 mb-4"
-            style={{ padding: "10px", backgroundColor: "rgb(182, 187, 194)" }}
+            style={{ padding: "10px", backgroundColor: "#ad863a" }}
           >
             Enter Details of the Job
           </h2>
         </div>
       </div>
 
-      <div className="bg-gray-100 p-6 mx-6 rounded-lg shadow-md">
+      <div className="w-1/2 mx-auto p-6 rounded-2xl" style={{
+        backgroundColor: "#ad866a",
+        backgroundImage:
+          "linear-gradient(62deg, #ad866a 0%, #f9d96c 50%, #f3e4cf 100%)",
+      }}>
         <form onSubmit={handleSubmit}>
           <label
             htmlFor="CompanyName"
@@ -214,7 +223,7 @@ const JobOpeningPage = () => {
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -142,7 +142,11 @@ const HomePage = () => {
   return (
     <div
       className="bg-gray-100 min-h-screen pb-4"
-      style={{ backgroundColor: "#f5efe7" }}
+      style={{
+        backgroundColor: "#ad866a",
+        backgroundImage:
+          "linear-gradient(62deg, #ad866a 0%, #f9d96c 50%, #f3e4cf 100%)",
+      }}
     >
       <div className="flex justify-center py-4 pt-20">
         <button
@@ -223,7 +227,9 @@ const HomePage = () => {
         {/* Announcements Sidebar */}
         <div className="w-1/3">
           <div className="fixed w-1/4 p-4 bg-white rounded-lg shadow-md  ml-10 ">
-            <h2 className="text-lg font-semibold mb-4 text-center">📢 Announcements</h2>
+            <h2 className="text-lg font-semibold mb-4 text-center">
+              📢 Announcements
+            </h2>
             {announcements.length > 0 ? (
               <ul>
                 {announcements.map((announcement, index) => (

@@ -289,7 +289,7 @@ router.post("/admin/postJob",async(req,res)=>{
 
 
 // Announcements Realted API's
-router.get("/admin/getAnnouncements",verifyToken,async(req,res)=>{
+router.get("/admin/getAnnouncements",async(req,res)=>{
   try{
     const data = await Announcements.find();
     res.status(200).json(data);
@@ -298,7 +298,7 @@ router.get("/admin/getAnnouncements",verifyToken,async(req,res)=>{
     res.status(500).json({error : error.message});
   }
 });
-router.post("/admin/postAnnouncements",verifyToken,async(req,res)=>{
+router.post("/admin/postAnnouncements",async(req,res)=>{
   try{
     const {title,description,postedBy} = req.body;
     const announcement = new Announcements({
@@ -313,7 +313,7 @@ router.post("/admin/postAnnouncements",verifyToken,async(req,res)=>{
     res.status(500).json({error : error.message});
   }
 });
-router.delete("/admin/deleteAnnouncements",verifyToken,async(req,res)=>{
+router.delete("/admin/deleteAnnouncements",async(req,res)=>{
   try{
     const id = req.body.id;
     const announcement = await Announcements.findByIdAndDelete(id);

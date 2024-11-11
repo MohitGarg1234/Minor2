@@ -51,10 +51,10 @@ const Navbar = ({unreadCount}) => {
   return (
     <>
       <div
-        className="border-gray-200 dark:bg-gray-900"
+        className="fixed w-full border-gray-200 dark:bg-gray-900 z-50"
         style={{ backgroundColor: "rgb(233 229 197)" }}
       >
-        <div className="flex flex-wrap items-center justify-between p-4">
+        <div className="flex flex-wrap items-center justify-between p-4 ">
           <Link
             to="/homepage"
             className="flex items-center space-x-3 rtl:space-x-reverse"
