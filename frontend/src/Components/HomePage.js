@@ -249,33 +249,33 @@ const HomePage = () => {
 
             {announcementModal && selectedAnnouncment && (
               <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                <div
-                  className="relative bg-white rounded-lg shadow-lg p-6 max-w-lg w-full"
-                  style={{ backgroundColor: "rgb(233 229 197)" }}
-                >
-                  <div className="flex border-b-gray-500 border-b-2 text-blue-800 mb-2">
-                    <span className="text-xl font-semibold  mb-2 ">
-                      {selectedAnnouncment.title}
-                    </span>
-                    <RxCross2
-                      size={23}
-                      className="mt-2 cursor-pointer hover:text-black"
-                      onClick={toggleAnnouncemntModal}
-                    />
-                  </div>
-                  <p>{selectedAnnouncment.description}</p>
-                  <p className="mt-2 text-sm text-gray-500">
-                    Published on:{" "}
-                    {new Date(selectedAnnouncment.date).toLocaleDateString()}
-                  </p>
+              <div
+                className="relative bg-white rounded-lg shadow-lg p-6 max-w-lg w-full"
+                style={{ backgroundColor: "rgb(233 229 197)" }}
+              >
+                <div className="flex items-center border-b-gray-500 border-b-2 text-blue-800 mb-2">
+                  <span className="text-xl font-semibold mb-2 flex-grow">
+                    {selectedAnnouncment.title}
+                  </span>
+                  <RxCross2
+                    size={23}
+                    className="mb-2 cursor-pointer hover:text-black ml-auto"
+                    onClick={toggleAnnouncemntModal}
+                  />
                 </div>
+                <p>{selectedAnnouncment.description}</p>
+                <p className="mt-2 text-sm text-gray-500">
+                  Published on:{" "}
+                  {new Date(selectedAnnouncment.date).toLocaleDateString()}
+                </p>
               </div>
+            </div>
             )}
           </div>
         </div>
 
         {/* Articles Section */}
-        <div className="flex flex-col space-y-4 ml-20">
+        <div className="w-2/3 flex flex-col space-y-4">
           {articles.map((article, index) => (
             <div
               key={index}

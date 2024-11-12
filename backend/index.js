@@ -1,43 +1,64 @@
-const  {createServer} = require("http");
-const {Server} = require("socket.io");
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
-const authEnrollRoute = require('./routes/authEnroll');
-const jobPostRoute = require('./routes/jobPost');
-const connectionRoute = require('./routes/connectionRoute');
-const messageRoute = require('./routes/messageRoute.js')
-const articlesRoute = require('./routes/articlesRoute.js')
-const experienceRoute = require('./routes/experienceRoute.js')
-const skillRoute = require('./routes/skillRoute.js')
-const authAdminRoutes = require('./routes/AdminAuth.js')
-const notificationRoutes = require('./routes/NotificationRoute.js')
-const multer = require('multer');
-const { GridFsStorage } = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
-const path = require('path');
+const authEnrollRoute = require("./routes/authEnroll");
+const jobPostRoute = require("./routes/jobPost");
+const connectionRoute = require("./routes/connectionRoute");
+const messageRoute = require("./routes/messageRoute.js");
+const articlesRoute = require("./routes/articlesRoute.js");
+const experienceRoute = require("./routes/experienceRoute.js");
+const skillRoute = require("./routes/skillRoute.js");
+const authAdminRoutes = require("./routes/AdminAuth.js");
+const notificationRoutes = require("./routes/NotificationRoute.js");
+const chatRoutes = require("./routes/chatRoute.js");
+const multer = require("multer");
+const { GridFsStorage } = require("multer-gridfs-storage");
+const Grid = require("gridfs-stream");
+const path = require("path");
+const Message = require("./models/Messages.js");
 const PORT = process.env.PORT || 5000;
-require('dotenv').config();
+require("dotenv").config();
 // Connect to MongoDB
-const server = createServer(app);
-const io = new Server(server,{
-  cors:{
+app.use(
+  cors({
     origin: "http://localhost:3000",
-    methods: ["GET", "POST","PUT","DELETE"],
-    credentials: true,  
-  }
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  },
 });
 const userSocketMap = new Map();
-io.on("connection",(socket)=>{
-  console.log("Client connected",socket.id);
-  socket.emit("Welcome","Welcome to the server");
+io.on("connection", (socket) => {
+  console.log("Client connected", socket.id);
+  socket.emit("Welcome", "Welcome to the server");
   socket.on("join", (userId) => {
-    userSocketMap.set(userId, socket.id); // Map user ID to socket ID
+    userSocketMap.set(userId, socket.id); 
     console.log(`User ${userId} joined with socket ID: ${socket.id}`);
   });
-
+  socket.on('sendMessage', async ({ sender, receiver, message, createdAt }) => {
+    const newMessage = new Message({ sender , receiver , message, createdAt, isRead: false });
+    await newMessage.save();
+    if (userSocketMap.has(receiver)) {
+      io.to(userSocketMap.get(receiver)).emit("receiveMessage", {
+        sender,
+        message,
+        createdAt,
+      });
+    }
+    io.to(userSocketMap.get(receiver)).emit("unreadMessageCount", { sender,unreadMessageCount: 1,  });
+    console.log(`Message from ${sender} to ${receiver}: ${message}`);
+  });
   // Handle user disconnect
   socket.on("disconnect", () => {
     console.log(`User disconnected: ${socket.id}`);
@@ -49,7 +70,7 @@ io.on("connection",(socket)=>{
       }
     }
   });
-})
+});
 // Pass io and userSocketMap to your routes
 app.use((req, res, next) => {
   req.io = io;
@@ -57,53 +78,51 @@ app.use((req, res, next) => {
   next();
 });
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log("Connected to MongoDB");
-}).catch(err => {
-  console.error("Error connecting to MongoDB:", err);
-});
-app.use(cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST","PUT", "DELETE"],
-    credentials: true,  
-  }));
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
+  });
 app.use(bodyParser.json());
 
-app.use(express.static(__dirname+"/"))
+app.use(express.static(__dirname + "/"));
 
 // Init gfs
 let gfs;
 const conn = mongoose.connection;
-conn.once('open', () => {
+conn.once("open", () => {
   gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection('uploads');
+  gfs.collection("uploads");
 });
 
 // Create storage engine
 const storage = new GridFsStorage({
-  url: 'mongodb://127.0.0.1:27017/JiitAlumniPortal',
+  url: "mongodb://127.0.0.1:27017/JiitAlumniPortal",
   file: (req, file) => {
     return {
-      filename: 'profile-' + Date.now() + path.extname(file.originalname),
-      bucketName: 'uploads'
+      filename: "profile-" + Date.now() + path.extname(file.originalname),
+      bucketName: "uploads",
     };
-  }
+  },
 });
 const upload = multer({ storage });
 
-
-app.use('/api',authEnrollRoute(upload, gfs, mongoose))
-app.use('/api',jobPostRoute)
-app.use('/api',connectionRoute)
-app.use('/api',messageRoute)
-app.use('/api',articlesRoute)
-app.use('/api',experienceRoute)
-app.use('/api',skillRoute)
-app.use('/api',authAdminRoutes); 
-app.use('/api',notificationRoutes); 
+app.use("/api", authEnrollRoute(upload, gfs, mongoose));
+app.use("/api", jobPostRoute);
+app.use("/api", connectionRoute);
+app.use("/api", messageRoute);
+app.use("/api", articlesRoute);
+app.use("/api", experienceRoute);
+app.use("/api", skillRoute);
+app.use("/api", authAdminRoutes);
+app.use("/api", notificationRoutes);
+app.use("/api", chatRoutes);
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

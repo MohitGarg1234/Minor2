@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { initFlowbite } from "flowbite";
 import { UserContext } from "../context/userContext";
 
-const Navbar = ({unreadCount}) => {
+const Navbar = ({ unreadCount, unreadMessageCount }) => {
   initFlowbite();
   let location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +13,6 @@ const Navbar = ({unreadCount}) => {
     localStorage.removeItem("token");
     window.location.href = "/";
   };
-
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -143,7 +142,7 @@ const Navbar = ({unreadCount}) => {
                       : ""
                   }`}
                 >
-                  Resume Improvement
+                  My Network
                 </Link>
               </li>
               <li className="mr-4">
@@ -156,6 +155,25 @@ const Navbar = ({unreadCount}) => {
                   }`}
                 >
                   Ask For Referral
+                </Link>
+              </li>
+              <li className="mr-4">
+                <Link
+                  to="/messages"
+                  className={`nav-link ${
+                    location.pathname === "/messages"
+                      ? "ml-2 block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+                      : ""
+                  }`}
+                >
+                  <div className="notification-icon cursor-pointer relative">
+                    Messaging
+                    {unreadMessageCount > 0 && (
+                      <span className="badge bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2">
+                        {unreadMessageCount}
+                      </span>
+                    )}
+                  </div>
                 </Link>
               </li>
               <li className="mr-4">

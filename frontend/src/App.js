@@ -19,8 +19,6 @@ import Resume from "./Components/Resume";
 import Setting from "./Components/Setting";
 import Notification from "./Components/Notification";
 import Askforreferal from "./Components/Askforreferal";
-import Message from "./Components/Message";
-import ChatArea from "./Components/ChatArea";
 import Dashboard from "./Components/Dashboard";
 import { io } from "socket.io-client";
 import { useContext, useEffect, useMemo, useState } from "react";
@@ -34,24 +32,30 @@ import AdminJobPost from "./Components/AdminJobPost";
 import AdminArticlePost from "./Components/AdminArticlePost";
 import AdminAnnouncement from "./Components/AdminAnnouncement";
 import AdminJobPosting from "./Components/AdminJobPosting";
+import ChatsList from "./Components/ChatsList";  // Chat List Component
+import Chat from "./Components/Chat"; 
 
 function App() {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
   const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadMessageCount, setUnreadMessageCount] = useState(0);
   const { currentUserId } = useContext(UserContext);
-  const socket = useMemo(() => io("http://localhost:5000"), []);
+  const socket = useMemo(() => {
+    return io("http://localhost:5000",{ transports: ["websocket"], })}, []);
 
   useEffect(() => {
     if (currentUserId) {
       socket.on("connect", () => {
         console.log("Connected", socket.id);
       });
-      console.log(currentUserId);
       socket.emit("join", currentUserId);
       socket.on("newNotification", (data) => {
-        console.log("New notification:", data.message);
         setUnreadCount((prev) => prev + 1); // Increment unread count
+      });
+      socket.on("unreadMessageCount", ({ unreadMessageCount }) => {
+        setUnreadMessageCount((prevCount) => prevCount + unreadMessageCount);
+        console.log(unreadMessageCount);
       });
       socket.on("Welcome", (s) => {
         console.log(s);
@@ -62,12 +66,11 @@ function App() {
       // eslint-disable-next-line
     }
   }, [socket, currentUserId]);
-
   return (
     <Router>
       <div>
         {!token && <Header />}
-        {token && role === "user" && <Navbar unreadCount={unreadCount} />}
+        {token && role === "user" && <Navbar unreadCount={unreadCount} unreadMessageCount={unreadMessageCount} />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
@@ -91,12 +94,12 @@ function App() {
               <Route path="/jobopening" element={<JobOpening />} />
               <Route path="/jobopeningpage" element={<JobOpeningPage />} />
               <Route path="/askforreferal" element={<Askforreferal />} />
-              <Route path="/resume" element={<Resume />} />
+              <Route path="/resume" element={<Resume socket={socket} />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/notification" element={<Notification unreadCount={unreadCount} setUnreadCount={setUnreadCount}/>}/>
-              <Route path="/message" element={<Message />} />
-              <Route path="/chatarea" element={<ChatArea />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/messages" element={<ChatsList socket={socket} userId={currentUserId} unreadMessageCount={unreadMessageCount} setUnreadMessageCount={setUnreadMessageCount}/>} />
+              <Route path="/message/:otherUserId" element={<Chat userId={currentUserId} socket={socket} />} /> 
             </>
           ) : null}
           {token && role === "admin" ? (
