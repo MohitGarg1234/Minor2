@@ -81,7 +81,7 @@ const ConnectAlumini = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center"
+      className="flex flex-col items-center"
       style={{
         backgroundColor: "#ad866a",
         backgroundImage:
@@ -90,30 +90,25 @@ const ConnectAlumini = () => {
         minHeight: "100vh",
       }}
     >
-      <div className="flex justify-center mt-16 ">
+      <div className="flex justify-center mt-20">
         <form className="max-w-md mx-auto mt-2 mb-2 md:mb-0 md:mr-4">
-          <label
-            htmlFor="default-search"
-            className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-          >
-            Search
-          </label>
           <div className="relative">
-            <div className="absolute inset-y-0 start-0 flex items-center pl-3 pointer-events-none ">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none ">
               <GoSearch size={24} />
             </div>
             <input
+              value={searchQuery}
+              onChange={handleSearchChange}
               type="search"
               id="default-search"
               className="w-full lg:w-72 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-2xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Search Alumni"
-              value={searchQuery}
-              onChange={handleSearchChange}
+              required
             />
           </div>
         </form>
       </div>
-      <div className="flex flex-wrap justify-center ">
+      <div className="flex flex-wrap justify-center">
         {filteredData &&
           filteredData.map((items, index) => (
             <div
@@ -121,7 +116,7 @@ const ConnectAlumini = () => {
               className="m-4 w-1/2 flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl md:flex-row md:max-w-2xl dark:border-gray-700 dark:bg-gray-800"
             >
               <img
-                className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+                className="object-cover w-full rounded-t-lg  md:w-1/5 lg:w-1/4 md:rounded-none md:rounded-s-lg"
                 src={items.image}
                 alt=""
                 style={{ height: "200px" }}

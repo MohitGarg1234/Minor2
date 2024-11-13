@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const ChatArea = () => {
   // State to keep track of the currently selected user
@@ -8,19 +8,19 @@ const ChatArea = () => {
   const userMessages = [
     {
       id: 1,
-      name: 'Luis1994',
+      name: "Luis1994",
       messages: [
-        { sender: 'Luis1994', content: 'Pick me at 9:00 AM' },
-        { sender: 'Sam', content: 'Okay, see you then!' }
-      ]
+        { sender: "Luis1994", content: "Pick me at 9:00 AM" },
+        { sender: "Sam", content: "Okay, see you then!" },
+      ],
     },
     {
       id: 2,
-      name: 'Everest Trip 2021',
+      name: "Everest Trip 2021",
       messages: [
-        { sender: 'Everest Trip 2021', content: 'Hi Sam, Welcome' },
-        { sender: 'Sam', content: 'Thank you!' }
-      ]
+        { sender: "Everest Trip 2021", content: "Hi Sam, Welcome" },
+        { sender: "Sam", content: "Thank you!" },
+      ],
     },
     // Add more user messages as needed
   ];
@@ -31,7 +31,7 @@ const ChatArea = () => {
   };
 
   return (
-<div className="container mx-auto shadow-lg rounded-lg">
+    <div className="container mx-auto shadow-lg rounded-lg">
       <div className="px-5 py-5 flex justify-between items-center bg-white border-b-2">
         <div className="font-semibold text-2xl">GoingChat</div>
         <div className="w-1/2">
@@ -63,7 +63,8 @@ const ChatArea = () => {
               <div className="w-full">
                 <div className="text-lg font-semibold">{user.name}</div>
                 <span className="text-gray-500">
-                  {user.messages.length > 0 && user.messages[user.messages.length - 1].content}
+                  {user.messages.length > 0 &&
+                    user.messages[user.messages.length - 1].content}
                 </span>
               </div>
             </div>
@@ -74,7 +75,7 @@ const ChatArea = () => {
             <div className="flex flex-col mt-5">
               {userMessages[selectedUser - 1].messages.map((message, index) => (
                 <div key={index} className="flex mb-4">
-                  {message.sender !== 'Sam' && (
+                  {message.sender !== "Sam" && (
                     <div className="flex items-center">
                       <img
                         src={`https://source.unsplash.com/${selectedUser}/600x600`}
@@ -86,7 +87,7 @@ const ChatArea = () => {
                       </div>
                     </div>
                   )}
-                  {message.sender === 'Sam' && (
+                  {message.sender === "Sam" && (
                     <div className="flex items-center justify-end">
                       <div className="py-3 px-4 bg-blue-400 rounded-r-xl rounded-tr-3xl rounded-bl-3xl text-white">
                         {message.content}
@@ -115,6 +116,6 @@ const ChatArea = () => {
       </div>
     </div>
   );
-}
+};
 
 export default ChatArea;

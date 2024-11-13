@@ -3,6 +3,7 @@ import Logo from "../images/Logo-jiit.png";
 import { Link, useLocation } from "react-router-dom";
 import { initFlowbite } from "flowbite";
 import { UserContext } from "../context/userContext";
+import { FiGrid, FiLogOut, FiUser } from "react-icons/fi";
 
 const Navbar = ({ unreadCount, unreadMessageCount }) => {
   initFlowbite();
@@ -198,50 +199,63 @@ const Navbar = ({ unreadCount, unreadMessageCount }) => {
             </ul>
           </div>
           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <button
-              id="dropdownUserAvatarButton"
-              data-dropdown-toggle="dropdownAvatar"
-              className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              type="button"
-            >
-              <span className="sr-only">Open user menu</span>
-              <img
-                className="w-8 h-8 rounded-full"
-                src={user && user.image}
-                alt="userphoto"
-              />
-            </button>
-            <div
-              id="dropdownAvatar"
-              className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
-            >
-              <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                <div>{user && user.name}</div>
-                <div className="font-medium truncate">{user && user.email}</div>
-              </div>
-              <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownUserAvatarButton"
-              >
-                <li>
-                  <Link
-                    to="/dashboard"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    onClick={handleClickSignOut}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  >
-                    Sign out
-                  </Link>
-                </li>
-              </ul>
-            </div>
+      <button
+        id="dropdownUserAvatarButton"
+        data-dropdown-toggle="dropdownAvatar"
+        className="flex items-center text-sm bg-gray-800 rounded-full p-1"
+        type="button"
+      >
+        <span className="sr-only">Open user menu</span>
+        {user?.image ? (
+          <img
+          className="w-8 h-8 rounded-full"
+          src={user && user.image}
+          alt={user ? user.name : "User avatar"}
+        />
+        ) : (
+          <FiUser className="text-white w-8 h-8 rounded-full" />
+        )}
+      </button>
+      
+      {/* Dropdown Menu */}
+      <div
+        id="dropdownAvatar"
+        className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-44 dark:bg-gray-700 dark:divide-gray-600"
+      >
+        {/* User Info */}
+        <div className="px-4 py-3 text-sm text-gray-900 dark:text-white ">
+          <div className="flex items-center space-x-2">
+            <FiUser className="text-gray-400 dark:text-gray-200" />
+            <span>{user?.name || 'Guest User'}</span>
           </div>
+          <div className="font-medium text-gray-500 dark:text-gray-300 truncate">
+            {user?.email || 'user@example.com'}
+          </div>
+        </div>
+        
+        {/* Menu Items */}
+        <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUserAvatarButton">
+          <li>
+            <Link
+              to="/dashboard"
+              className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              <FiGrid className="mr-2" />
+              Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link
+              onClick={handleClickSignOut}
+              className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              <FiLogOut className="mr-2" />
+              Sign Out
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </div>
         </div>
       </div>
     </>
