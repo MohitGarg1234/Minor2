@@ -1,16 +1,26 @@
 import React, { useState, useContext } from "react";
 import { AdminContext } from "../context/adminContext";
-import { FaBuilding, FaFileAlt, FaBriefcase, FaCalendarAlt, FaMoneyBill, FaMapMarkerAlt, FaChartLine, FaToolbox, FaLink } from "react-icons/fa";
+import {
+  FaBuilding,
+  FaFileAlt,
+  FaBriefcase,
+  FaCalendarAlt,
+  FaMoneyBill,
+  FaMapMarkerAlt,
+  FaChartLine,
+  FaToolbox,
+  FaLink,
+} from "react-icons/fa";
 import { FaPaperPlane } from "react-icons/fa";
 
 const AdminJobPosting = () => {
-  const {adminId} = useContext(AdminContext);
+  const { adminId } = useContext(AdminContext);
   const [formData, setFormData] = useState({
     CompanyName: "",
     JobDescription: "",
-    Role:"",
+    Role: "",
     JobType: "",
-    JobSalary:"",
+    JobSalary: "",
     JobLocation: "",
     Experience: "",
     SkillsRequired: "",
@@ -18,7 +28,7 @@ const AdminJobPosting = () => {
     postedBy: adminId,
   });
 
-  const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,36 +48,46 @@ const AdminJobPosting = () => {
       return;
     }
     try {
-      const response = await fetch('http://localhost:5000/api/admin/postJob', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/api/admin/postJob", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        throw new Error('Failed to post job');
+        throw new Error("Failed to post job");
       }
-      window.location.href = '/job-post';
+      window.location.href = "/job-post";
     } catch (error) {
-      console.error('Error posting job:', error);
-      
+      console.error("Error posting job:", error);
     }
   };
   return (
-    <>
+    <div
+      style={{
+        backgroundColor: "#8EC5FC",
+        backgroundImage: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+      }}
+    >
       <div className="w-1/3 mx-auto ">
         <div className="text-center p-2">
           <h2
             className="text-lg font-semibold text-gray-800 rounded-2xl my-4"
-            style={{ padding: "10px", backgroundColor: "rgb(182, 187, 194)" }}
+            style={{ padding: "10px", backgroundColor: "rgb(123 160 211)" }}
           >
             Enter Details of the Job
           </h2>
         </div>
       </div>
 
-      <div className="bg-gray-100 p-6 mx-6 rounded-lg shadow-md">
+      <div
+        className=" w-1/2 mx-auto p-6 rounded-2xl "
+        style={{
+          backgroundColor: "#8EC5FC",
+          backgroundImage: "linear-gradient(62deg, rgb(146 191 228) 0%, rgb(212 183 242) 100%)",
+        }}
+      >
         <form onSubmit={handleSubmit}>
           <label
             htmlFor="CompanyName"
@@ -80,7 +100,8 @@ const AdminJobPosting = () => {
             id="CompanyName"
             name="CompanyName"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-            value={formData.CompanyName} onChange={handleChange}
+            value={formData.CompanyName}
+            onChange={handleChange}
             required
           />
 
@@ -96,7 +117,8 @@ const AdminJobPosting = () => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             rows="4"
             required
-            value={formData.JobDescription} onChange={handleChange}
+            value={formData.JobDescription}
+            onChange={handleChange}
           ></textarea>
 
           <label
@@ -111,7 +133,8 @@ const AdminJobPosting = () => {
             name="Role"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             required
-            value={formData.Role} onChange={handleChange}
+            value={formData.Role}
+            onChange={handleChange}
           />
           <label
             htmlFor="JobType"
@@ -125,7 +148,8 @@ const AdminJobPosting = () => {
             name="JobType"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             required
-            value={formData.JobType} onChange={handleChange}
+            value={formData.JobType}
+            onChange={handleChange}
           />
           <label
             htmlFor="JobSalary"
@@ -139,7 +163,8 @@ const AdminJobPosting = () => {
             name="JobSalary"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             required
-            value={formData.JobSalary} onChange={handleChange}
+            value={formData.JobSalary}
+            onChange={handleChange}
           />
 
           <label
@@ -154,7 +179,8 @@ const AdminJobPosting = () => {
             name="JobLocation"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             required
-            value={formData.JobLocation} onChange={handleChange}
+            value={formData.JobLocation}
+            onChange={handleChange}
           />
 
           <label
@@ -169,7 +195,8 @@ const AdminJobPosting = () => {
             name="Experience"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             required
-            value={formData.Experience} onChange={handleChange}
+            value={formData.Experience}
+            onChange={handleChange}
           />
 
           <label
@@ -185,7 +212,8 @@ const AdminJobPosting = () => {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             rows="4"
             required
-            value={formData.SkillsRequired} onChange={handleChange}
+            value={formData.SkillsRequired}
+            onChange={handleChange}
           />
 
           <label
@@ -200,11 +228,10 @@ const AdminJobPosting = () => {
             name="ApplyLinks"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
             required
-            value={formData.ApplyLinks} onChange={handleChange}
+            value={formData.ApplyLinks}
+            onChange={handleChange}
           />
-          {error && (
-            <p className="text-red-500 text-sm mt-2">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
           <button
             type="submit"
@@ -214,10 +241,8 @@ const AdminJobPosting = () => {
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 
 export default AdminJobPosting;
-
-

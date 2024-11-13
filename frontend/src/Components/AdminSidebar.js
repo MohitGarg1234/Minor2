@@ -1,7 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FiLogOut } from 'react-icons/fi';
 
 const AdminSidebar = () => {
+    // const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  };
+//   const handleClickSignOut = () => {
+//     localStorage.removeItem("token");
+//     window.location.href = "/";
+//   };
   return (
     <div>
         <div className="fixed flex min-h-screen bg-[#4c38a9]">
@@ -26,6 +37,13 @@ const AdminSidebar = () => {
                 </Link>
             </li>
             </ul>
+
+            <button
+          onClick={handleSignOut}
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center p-3 text-center rounded-lg font-bold text-white hover:bg-[#322375]"
+        >
+          <FiLogOut className="mr-2" /> Sign Out
+        </button>
         </div>
 
         {/* Content */}
