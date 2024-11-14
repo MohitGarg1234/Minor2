@@ -36,17 +36,17 @@ const JobsSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+const Jobs = mongoose.models.Jobs || mongoose.model("Jobs", JobsSchema, "jobschemas");
 async function createTTLIndex() {
   try {
-    const Job = mongoose.model("JobSchema", JobsSchema);
-    await Job.collection.dropIndex("createdAt_1");
-    await Job.collection.createIndex(
+    await Jobs.collection.createIndex(
       { createdAt: 1 },
-      { expireAfterSeconds: 2592000 }
+      { expireAfterSeconds: 2592000 } 
     );
+    console.log("TTL index created successfully.");
   } catch (error) {
     console.error("Error creating TTL index:", error);
   }
 }
 createTTLIndex();
-module.exports = mongoose.model("JobSchema", JobsSchema);
+module.exports = Jobs;

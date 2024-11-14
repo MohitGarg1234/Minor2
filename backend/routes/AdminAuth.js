@@ -3,7 +3,7 @@ const router = express.Router();
 const Admin = require("../models/Admin");
 const Articles = require("../models/Articles");
 const Announcements = require("../models/Announcements");
-const Jobs = require('../models/jobs');
+const Jobs = require('../models/Jobs');
 const validator = require("validator");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
