@@ -6,8 +6,13 @@ const articleSchema = new mongoose.Schema({
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    refPath: 'authorModel',
     required: true
+  },
+  authorModel: {
+    type: String,
+    required: true,
+    enum: ['User', 'Admin'] 
   },
   createdAt: {
     type: Date,

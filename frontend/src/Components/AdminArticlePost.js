@@ -49,6 +49,8 @@ const AdminArticlePost = () => {
       if (image) {
         formData.append("image", image);
       }
+      const authorModel = "Admin";
+      formData.append("authorModel", authorModel);
       const response = await fetch("http://127.0.0.1:5000/api/admin/addPost", {
         method: "POST",
         body: formData,

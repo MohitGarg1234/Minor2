@@ -47,12 +47,15 @@ const HomePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const authorModel = "User";
       const formData = new FormData();
       formData.append("content", content);
       formData.append("author", author);
+      formData.append("authorModel", authorModel);
       if (image) {
         formData.append("image", image);
       }
+
       const response = await fetch("http://127.0.0.1:5000/api/articles", {
         method: "POST",
         body: formData,

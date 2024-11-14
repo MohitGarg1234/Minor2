@@ -72,6 +72,7 @@ router.post("/articles", upload.single("image"), async (req, res) => {
     const article = new Article({
       content,
       author,
+      authorModel,
       image,
     });
     await article.save();
