@@ -94,7 +94,7 @@ const Notification = ({ unreadCount, setUnreadCount }) => {
               >
                 <div className="flex-shrink-0 mr-4">
                   <img
-                    src={Logo}
+                    src={notification.sender.image || Logo}
                     alt="Profile"
                     className="w-12 h-12 rounded-full object-cover"
                   />

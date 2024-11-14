@@ -28,7 +28,7 @@ const JobOpening = () => {
   const [userDetails, setUserDetails] = useState([]);
   const decodedToken = parseJwt(token);
   const currentUserId = decodedToken.userId;
-  const fetchUserDetails = async (userId) => {
+  const fetchUserDetails = async () => {
     try {
       const response = await fetch(
         `http://localhost:5000/api/${currentUserId}`
@@ -121,7 +121,7 @@ const JobOpening = () => {
             </button>
           </Link>
         ) : (
-          <h2 className="mt-20"></h2>
+          <h2 className="mt-20">{" "}</h2>
         )}
 
         <div className="mx-auto mt-2 lg:grid lg:grid-cols-3 md:grid grid-cols-2">
@@ -137,11 +137,9 @@ const JobOpening = () => {
 };
 
 const JobListing = ({ job }) => {
-  const matchPercentageColor =
-    job.matchPercentage > 50 ? "text-green-500" : "text-red-500";
-  console.log(job.ApplyLinks);
+  const matchPercentageColor = job.matchPercentage >= 50 ? "text-green-500" : "text-red-500";
   return (
-    <div className="w-full md:w-10/12 md:ml-5 lg:w-10/12 mt-2">
+    <div key={job._id} className="w-full md:w-10/12 md:ml-5 lg:w-10/12 mt-2">
       <div className="mb-3 flex items-center bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
         <div className="p-4 w-2/3">
           <h6 className="flex items-center font-bold text-lg mb-2 text-gray-900 dark:text-white">

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Jobs = require('../models/jobs');
 const User = require("../models/User");
+const Admin = require("../models/Admin");
 const mongoose = require('mongoose');
 // Create a new job posting
 router.post('/jobpost', async (req, res) => {
@@ -63,9 +64,12 @@ router.get('/:id', async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: 'Invalid user ID' });
     }
-    const user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.id);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      user = await Admin.findById(req.params.id);
+    }
+    if (!user) {
+      return res.status(404).json({ message: 'Admin or User not found' });
     }
     res.json(user);
   } catch (error) {

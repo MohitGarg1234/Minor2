@@ -10,7 +10,7 @@ router.get("/notifications/:recipientId", async (req, res) => {
   try {
     // Fetch the notifications, populate sender and article information
     const notifications = await Notification.find({ recipient: recipientId })
-      .populate("sender", "name email") // Populate sender's name and email
+      .populate("sender", "name email image") // Populate sender's name and email
       .populate({
         path: "article", // Populate article data
         select: "content likes dislikes author", // Select relevant fields from the article

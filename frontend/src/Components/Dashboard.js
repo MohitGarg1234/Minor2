@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { FaPlus, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import AddExperience from "./AddExperience";
